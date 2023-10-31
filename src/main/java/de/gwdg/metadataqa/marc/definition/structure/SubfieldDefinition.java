@@ -14,12 +14,7 @@ import de.gwdg.metadataqa.marc.definition.general.validator.SubfieldValidator;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -96,6 +91,14 @@ public class SubfieldDefinition implements Serializable {
     if (code.startsWith("ind")) {
       processIndicatorType(cardinalityCode);
     }
+  }
+
+  public SubfieldDefinition(String code, String label, boolean repeatable) {
+    this.code = code;
+    this.label = label;
+
+    // this could probably be changed to a Cardinality object
+    this.cardinalityCode = repeatable ? Cardinality.Repeatable.getCode() : Cardinality.Nonrepeatable.getCode();
   }
 
   public String getCode() {
@@ -367,6 +370,10 @@ public class SubfieldDefinition implements Serializable {
 
   public void setMarcVersion(MarcVersion marcVersion) {
     this.marcVersion = marcVersion;
+  }
+
+  public boolean isRepeatable() {
+    return getCardinality().equals(Cardinality.Repeatable);
   }
 
   public boolean hasCodeList() {

@@ -1,22 +1,23 @@
 package de.gwdg.metadataqa.marc.utils.unimarc;
 
 import de.gwdg.metadataqa.marc.definition.Cardinality;
-import de.gwdg.metadataqa.marc.definition.bibliographic.BibliographicFieldDefinition;
+import de.gwdg.metadataqa.marc.definition.structure.DataFieldDefinition;
+import de.gwdg.metadataqa.marc.definition.structure.Indicator;
 import de.gwdg.metadataqa.marc.definition.structure.SubfieldDefinition;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 /**
  * Represents a field definition in the Unimarc schema.
  */
-public class UnimarcFieldDefinition implements BibliographicFieldDefinition {
-    private final String tag;
-    private final String label;
-    private final Cardinality cardinality;
+public class UnimarcFieldDefinition extends DataFieldDefinition {
+
     private final boolean required;
     private final Map<String, SubfieldDefinition> subfieldDefinitions = new HashMap<>();
+
 
     public UnimarcFieldDefinition(String tag, String label, boolean repeatable, boolean required) {
         this.tag = tag;
@@ -25,13 +26,22 @@ public class UnimarcFieldDefinition implements BibliographicFieldDefinition {
         this.required = required;
     }
 
-    public void addSubfieldDefinition(SubfieldDefinition subfieldDefinition) {
-        subfieldDefinitions.put(subfieldDefinition.getCode(), subfieldDefinition);
-        subfieldDefinition.setParent(this);
+    public void setSubfieldDefinitions(List<SubfieldDefinition> subfieldDefinitions) {
+        for (SubfieldDefinition subfieldDefinition : subfieldDefinitions) {
+            this.subfieldDefinitions.put(subfieldDefinition.getCode(), subfieldDefinition);
+        }
     }
 
     public Map<String, SubfieldDefinition> getSubfieldDefinitions() {
         return subfieldDefinitions;
+    }
+
+    public void setInd1(Indicator ind1) {
+        this.ind1 = ind1;
+    }
+
+    public void setInd2(Indicator ind2) {
+        this.ind2 = ind2;
     }
 
     public boolean isRepeatable() {
@@ -40,25 +50,5 @@ public class UnimarcFieldDefinition implements BibliographicFieldDefinition {
 
     public boolean isRequired() {
         return required;
-    }
-
-    @Override
-    public String getTag() {
-        return tag;
-    }
-
-    @Override
-    public Cardinality getCardinality() {
-        return cardinality;
-    }
-
-    @Override
-    public String getLabel() {
-        return label;
-    }
-
-    @Override
-    public String getDescriptionUrl() {
-        return null;
     }
 }

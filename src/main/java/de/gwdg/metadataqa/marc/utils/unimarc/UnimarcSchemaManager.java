@@ -15,6 +15,19 @@ public class UnimarcSchemaManager {
         return fieldDirectory.size();
     }
 
+    /**
+     * Retrieve a field definition by the given dataField's tag.
+     * This method is used as a means of keeping consistency with the PicaSchemaManager in hopes of being
+     * able to provide a unified interface for both in the future.
+     * @param dataField The data field to look up
+     * @return The definition for the respective dataField
+     */
+    public UnimarcFieldDefinition lookup(UnimarcDataField dataField) {
+        String tag = dataField.getTag();
+        return lookup(tag);
+    }
+
+
     public UnimarcFieldDefinition lookup(String searchTerm) {
         return fieldDirectory.get(searchTerm);
     }

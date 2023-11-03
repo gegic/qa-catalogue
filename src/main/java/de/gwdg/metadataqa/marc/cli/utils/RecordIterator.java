@@ -1,10 +1,10 @@
 package de.gwdg.metadataqa.marc.cli.utils;
 
-import de.gwdg.metadataqa.marc.cli.parameters.CommonParameters;
-import de.gwdg.metadataqa.marc.dao.Leader;
 import de.gwdg.metadataqa.marc.MarcFactory;
-import de.gwdg.metadataqa.marc.dao.record.BibliographicRecord;
+import de.gwdg.metadataqa.marc.cli.parameters.CommonParameters;
 import de.gwdg.metadataqa.marc.cli.processor.BibliographicInputProcessor;
+import de.gwdg.metadataqa.marc.dao.Leader;
+import de.gwdg.metadataqa.marc.dao.record.BibliographicRecord;
 import de.gwdg.metadataqa.marc.definition.DataSource;
 import de.gwdg.metadataqa.marc.definition.MarcVersion;
 import de.gwdg.metadataqa.marc.definition.bibliographic.SchemaType;
@@ -13,6 +13,8 @@ import de.gwdg.metadataqa.marc.utils.marcreader.AlephseqMarcReader;
 import de.gwdg.metadataqa.marc.utils.marcreader.ErrorAwareReader;
 import de.gwdg.metadataqa.marc.utils.pica.PicaSchemaManager;
 import de.gwdg.metadataqa.marc.utils.pica.PicaSchemaReader;
+import de.gwdg.metadataqa.marc.utils.unimarc.UnimarcSchemaManager;
+import de.gwdg.metadataqa.marc.utils.unimarc.UnimarcSchemaReader;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.lang3.time.DurationFormatUtils;
@@ -45,7 +47,9 @@ public class RecordIterator {
   private MarcVersion marcVersion;
   private Leader.Type defaultRecordType;
   private DecimalFormat decimalFormat;
+  // this schema attribute could be merged with the UNIMARC one
   private PicaSchemaManager picaSchema;
+  private UnimarcSchemaManager unimarcSchema;
   private String status = "waits";
   private boolean processWithEroors = false;
 
@@ -66,6 +70,13 @@ public class RecordIterator {
     decimalFormat = new DecimalFormat();
     if (parameters.isPica()) {
       picaSchema = PicaSchemaReader.createSchemaManager(parameters.getPicaSchemaFile());
+    } else if (parameters.isUnimarc()) {
+      UnimarcSchemaReader unimarcSchemaReader = new UnimarcSchemaReader();
+      String schemaFilePath = parameters.getPicaSchemaFile();
+      if (schemaFilePath == null) {
+        schemaFilePath = "src/main/resources/unimarc/avram-unimarc.json";
+      }
+      unimarcSchema = unimarcSchemaReader.createSchema(schemaFilePath);
     }
 
     if (processor.getParameters().doLog())
@@ -169,6 +180,7 @@ public class RecordIterator {
       try {
         processor.processRecord(iteratorResponse.getMarc4jRecord(), recordNumber);
 
+        // Trasform the marc4j record to a bibliographic record
         BibliographicRecord bibliographicRecord = iteratorResponse.hasBlockingError()
                                                 ? null
                                                 : transformMarcRecord(iteratorResponse.getMarc4jRecord());
@@ -197,10 +209,13 @@ public class RecordIterator {
   }
 
   private BibliographicRecord transformMarcRecord(Record marc4jRecord) {
-    if (parameters.getSchemaType().equals(SchemaType.MARC21))
+    if (parameters.getSchemaType().equals(SchemaType.MARC21)) {
       return MarcFactory.createFromMarc4j(marc4jRecord, defaultRecordType, marcVersion, replacementInControlFields);
-    else
+    } else if (parameters.getSchemaType().equals(SchemaType.PICA)) {
       return MarcFactory.createPicaFromMarc4j(marc4jRecord, picaSchema);
+    } else {
+      return MarcFactory.createUnimarcFromMarc4j(marc4jRecord, unimarcSchema);
+    }
   }
 
   private MarcReader getMarcFileReader(CommonParameters parameters, Path path) throws Exception {

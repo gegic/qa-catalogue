@@ -1,13 +1,20 @@
 package de.gwdg.metadataqa.marc.utils.unimarc;
 
+import de.gwdg.metadataqa.marc.EncodedValue;
 import de.gwdg.metadataqa.marc.definition.general.codelist.CodeList;
+import de.gwdg.metadataqa.marc.definition.structure.Indicator;
 import de.gwdg.metadataqa.marc.definition.structure.SubfieldDefinition;
 import org.junit.Test;
 
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class UnimarcSchemaReaderTest {
     @Test
@@ -57,6 +64,29 @@ public class UnimarcSchemaReaderTest {
     }
 
     /**
+     * As it would be counterproductive to test the structure of every single indicator,
+     * this test only checks if the structure of the indicators of the last field is correct.
+     */
+    @Test
+    public void createSchema_indicatorStructureIsCorrect() {
+        UnimarcSchemaReader unimarcReader = new UnimarcSchemaReader();
+        String path = getPath("unimarc/avram-unimarc.json");
+        UnimarcSchemaManager schema = unimarcReader.createSchema(path);
+
+        String expectedIndicator1Label = "Type of field";
+        int expectedCodesSize = 3;
+
+        UnimarcFieldDefinition field886 = schema.lookup("886");
+
+        assertNotNull(field886.getInd1());
+
+        Indicator indicator1 = field886.getInd1();
+        assertEquals(expectedIndicator1Label, indicator1.getLabel());
+        assertEquals(expectedCodesSize, indicator1.getCodes().size());
+        assertNull(field886.getInd2());
+    }
+
+    /**
      * As it would be counterproductive to test the structure of every single subfield,
      * this test only checks if the structure of the subfields of the last field is correct
      * (as it contains a codelist), and the field 100 as it contains positions.
@@ -71,6 +101,9 @@ public class UnimarcSchemaReaderTest {
 
         int expectedSubfieldCount = 3;
         int expectedSubfield2CodeListSize = 56;
+        int expected100aPositionCount = 12;
+        int expected100aPosition1CodeCount = 12;
+
         UnimarcFieldDefinition lastField = schema.lookup("886");
         Map<String, SubfieldDefinition> subfieldDefinitions = lastField.getSubfieldDefinitions();
 
@@ -98,8 +131,10 @@ public class UnimarcSchemaReaderTest {
         SubfieldDefinition subfield100a = subfieldDefinitions100.get("a");
         assertNotNull(subfield100a);
 
-        // TODO Not done yet
-//        assertEquals(x, subfield100a.getPositions().size());
+        assertEquals(expected100aPositionCount, subfield100a.getPositions().size());
+
+        List<EncodedValue> codes = subfield100a.getPosition(8, 9).getCodes();
+        assertEquals(expected100aPosition1CodeCount, codes.size());
     }
     private String getPath(String filename) {
         return Paths.get("src/test/resources/" + filename).toAbsolutePath().toString();

@@ -5,6 +5,7 @@ import de.gwdg.metadataqa.marc.definition.general.codelist.CodeList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class UnimarcCodeList extends CodeList {
 
@@ -14,8 +15,8 @@ public class UnimarcCodeList extends CodeList {
         // TODO ask why we have both codes and index
         this.index = new HashMap<>();
     }
-    public void addCode(EncodedValue code) {
-        codes.add(code);
-        index.put(code.getCode(), code);
+    public void setCodes(List<EncodedValue> codes) {
+        this.codes = codes;
+        indexCodes();
     }
 }

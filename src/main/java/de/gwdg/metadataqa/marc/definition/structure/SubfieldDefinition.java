@@ -14,7 +14,12 @@ import de.gwdg.metadataqa.marc.definition.general.validator.SubfieldValidator;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -302,6 +307,15 @@ public class SubfieldDefinition implements Serializable {
 
   public boolean hasPositions() {
     return positions != null;
+  }
+
+  public ControlfieldPositionDefinition getPosition(int start, int end) {
+    for (ControlfieldPositionDefinition def : positions) {
+      if (def.getPositionStart() == start && def.getPositionEnd() == end) {
+        return def;
+      }
+    }
+    return null;
   }
 
   public SubfieldDefinition setCompilanceLevels(String national) {

@@ -1,12 +1,12 @@
 package de.gwdg.metadataqa.marc.cli.parameters;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import de.gwdg.metadataqa.marc.cli.utils.ignorablerecords.RecordIgnorator;
-import de.gwdg.metadataqa.marc.cli.utils.ignorablerecords.RecordIgnoratorFactory;
+import de.gwdg.metadataqa.marc.cli.utils.IgnorableFields;
 import de.gwdg.metadataqa.marc.cli.utils.ignorablerecords.RecordFilter;
 import de.gwdg.metadataqa.marc.cli.utils.ignorablerecords.RecordFilterFactory;
+import de.gwdg.metadataqa.marc.cli.utils.ignorablerecords.RecordIgnorator;
+import de.gwdg.metadataqa.marc.cli.utils.ignorablerecords.RecordIgnoratorFactory;
 import de.gwdg.metadataqa.marc.dao.Leader;
-import de.gwdg.metadataqa.marc.cli.utils.IgnorableFields;
 import de.gwdg.metadataqa.marc.definition.DataSource;
 import de.gwdg.metadataqa.marc.definition.MarcFormat;
 import de.gwdg.metadataqa.marc.definition.MarcVersion;
@@ -94,6 +94,7 @@ public class CommonParameters implements Serializable {
       options.addOption("2", "picaIdField", true, "PICA id field");
       options.addOption("u", "picaSubfieldSeparator", true, "PICA subfield separator");
       options.addOption("j", "picaSchemaFile", true, "Avram PICA schema file");
+      // For now, I'll be using picaSchemaFile for both PICA and UNIMARC. The option could be renamed later or a separate option could be added
       options.addOption("w", "schemaType", true, "metadata schema type ('MARC21', 'UNIMARC', or 'PICA')");
       options.addOption("k", "picaRecordType", true, "picaRecordType");
       options.addOption("c", "allowableRecords", true, "allow records for the analysis");
@@ -151,6 +152,7 @@ public class CommonParameters implements Serializable {
     if (cmd.hasOption("picaSchemaFile"))
       picaSchemaFile = cmd.getOptionValue("picaSchemaFile");
   }
+
 
   private void readPicaRecordType() {
     if (cmd.hasOption("picaRecordType"))
@@ -526,7 +528,6 @@ public class CommonParameters implements Serializable {
   public String getPicaSchemaFile() {
     return picaSchemaFile;
   }
-
   public SchemaType getSchemaType() {
     return schemaType;
   }
@@ -541,6 +542,10 @@ public class CommonParameters implements Serializable {
 
   public boolean isPica() {
     return schemaType.equals(SchemaType.PICA);
+  }
+
+  public boolean isUnimarc() {
+    return schemaType.equals(SchemaType.UNIMARC);
   }
 
   public String getGroupBy() {

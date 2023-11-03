@@ -1,8 +1,8 @@
 package de.gwdg.metadataqa.marc;
 
 import de.gwdg.metadataqa.api.json.DataElement;
-import de.gwdg.metadataqa.api.model.selector.JsonSelector;
 import de.gwdg.metadataqa.api.model.XmlFieldInstance;
+import de.gwdg.metadataqa.api.model.selector.JsonSelector;
 import de.gwdg.metadataqa.api.schema.MarcJsonSchema;
 import de.gwdg.metadataqa.api.schema.Schema;
 import de.gwdg.metadataqa.marc.cli.utils.IteratorResponse;
@@ -14,24 +14,24 @@ import de.gwdg.metadataqa.marc.dao.Control007;
 import de.gwdg.metadataqa.marc.dao.Control008;
 import de.gwdg.metadataqa.marc.dao.DataField;
 import de.gwdg.metadataqa.marc.dao.Leader;
-import de.gwdg.metadataqa.marc.dao.record.Marc21Record;
 import de.gwdg.metadataqa.marc.dao.record.BibliographicRecord;
+import de.gwdg.metadataqa.marc.dao.record.Marc21Record;
 import de.gwdg.metadataqa.marc.dao.record.PicaRecord;
-import de.gwdg.metadataqa.marc.definition.structure.DataFieldDefinition;
+import de.gwdg.metadataqa.marc.dao.record.UnimarcRecord;
 import de.gwdg.metadataqa.marc.definition.MarcVersion;
-import de.gwdg.metadataqa.marc.definition.structure.SubfieldDefinition;
 import de.gwdg.metadataqa.marc.definition.TagDefinitionLoader;
-
-import de.gwdg.metadataqa.marc.utils.alephseq.AlephseqLine;
+import de.gwdg.metadataqa.marc.definition.structure.DataFieldDefinition;
+import de.gwdg.metadataqa.marc.definition.structure.SubfieldDefinition;
 import de.gwdg.metadataqa.marc.utils.MapToDatafield;
-
+import de.gwdg.metadataqa.marc.utils.alephseq.AlephseqLine;
 import de.gwdg.metadataqa.marc.utils.alephseq.MarcMakerLine;
 import de.gwdg.metadataqa.marc.utils.alephseq.MarclineLine;
 import de.gwdg.metadataqa.marc.utils.pica.PicaDataField;
-import de.gwdg.metadataqa.marc.utils.pica.PicaFieldDefinition;
-import de.gwdg.metadataqa.marc.utils.pica.reader.model.PicaLine;
 import de.gwdg.metadataqa.marc.utils.pica.PicaSchemaManager;
 import de.gwdg.metadataqa.marc.utils.pica.PicaSubfield;
+import de.gwdg.metadataqa.marc.utils.pica.reader.model.PicaLine;
+import de.gwdg.metadataqa.marc.utils.unimarc.UnimarcDataField;
+import de.gwdg.metadataqa.marc.utils.unimarc.UnimarcSchemaManager;
 import net.minidev.json.JSONArray;
 import org.marc4j.marc.ControlField;
 import org.marc4j.marc.Record;
@@ -39,8 +39,8 @@ import org.marc4j.marc.Subfield;
 import org.marc4j.marc.impl.ControlFieldImpl;
 import org.marc4j.marc.impl.DataFieldImpl;
 import org.marc4j.marc.impl.LeaderImpl;
-import org.marc4j.marc.impl.SubfieldImpl;
 import org.marc4j.marc.impl.RecordImpl;
+import org.marc4j.marc.impl.SubfieldImpl;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -181,6 +181,21 @@ public class MarcFactory {
     return marcRecord;
   }
 
+  // This method could potentially be merged with the createPicaFromMarc4j method
+  public static BibliographicRecord createUnimarcFromMarc4j(Record marc4jRecord, UnimarcSchemaManager unimarcSchemaManager) {
+    var marcRecord = new UnimarcRecord();
+    importMarc4jControlFields(marc4jRecord, marcRecord, null);
+    importMarc4jDataFields(marc4jRecord, marcRecord, unimarcSchemaManager);
+
+    return marcRecord;
+  }
+
+  /**
+   * As a part of transormation of the marc4jRecord into marcRecord, imports control fields from the former to the latter
+   * @param marc4jRecord The Marc4j record being transformed into BibliographicRecord
+   * @param marcRecord Can be Marc21Record, PicaRecord or UnimarcRecord
+   * @param replacementInControlFields Usually a ^ or # character which should be replaced with space in control fields' data
+   */
   private static void importMarc4jControlFields(Record marc4jRecord,
                                                 BibliographicRecord marcRecord,
                                                 String replacementInControlFields) {
@@ -231,6 +246,7 @@ public class MarcFactory {
                                              BibliographicRecord marcRecord,
                                              PicaSchemaManager schema) {
     for (org.marc4j.marc.DataField dataField : marc4jRecord.getDataFields()) {
+      // todo discuss this as it feels as if it's never going to be an instance of PicaDataField
       boolean isPica = dataField instanceof PicaDataField;
       PicaDataField picadf = isPica ? (PicaDataField) dataField : null;
       var definition = isPica
@@ -240,7 +256,28 @@ public class MarcFactory {
       if (definition == null)
         marcRecord.addUnhandledTags(isPica && picadf != null ? picadf.getFullTag() : dataField.getTag());
 
-      var field = extractPicaDataField(dataField, definition, MarcVersion.MARC21);
+      var field = extractDataField(dataField, definition, MarcVersion.MARC21);
+      marcRecord.addDataField(field);
+    }
+  }
+
+  // This method could probably be merged with the respective Pica method after the discussing
+  private static void importMarc4jDataFields(Record marc4jRecord,
+                                             BibliographicRecord marcRecord,
+                                             UnimarcSchemaManager schema) {
+    for (org.marc4j.marc.DataField dataField : marc4jRecord.getDataFields()) {
+      // todo discuss this as it feels as if it's never going to be an instance of UnimarcDataField
+      boolean isUnimarc = dataField instanceof UnimarcDataField;
+      UnimarcDataField unimarcDf = isUnimarc ? (UnimarcDataField) dataField : null;
+      var definition = isUnimarc
+          ? schema.lookup(unimarcDf)
+          : schema.lookup(dataField.getTag());
+
+      if (definition == null) {
+        marcRecord.addUnhandledTags(unimarcDf != null ? unimarcDf.getTag() : dataField.getTag());
+      }
+
+      var field = extractDataField(dataField, definition, MarcVersion.MARC21);
       marcRecord.addDataField(field);
     }
   }
@@ -274,41 +311,7 @@ public class MarcFactory {
     for (Subfield subfield : dataField.getSubfields()) {
       var code = Character.toString(subfield.getCode());
       SubfieldDefinition subfieldDefinition = definition == null ? null : definition.getSubfield(code);
-      MarcSubfield marcSubfield = null;
-      if (subfieldDefinition == null) {
-        marcSubfield = new MarcSubfield(null, code, subfield.getData());
-      } else {
-        marcSubfield = new MarcSubfield(subfieldDefinition, code, subfield.getData());
-      }
-      marcSubfield.setField(field);
-      field.getSubfields().add(marcSubfield);
-    }
-    field.indexSubfields();
-    return field;
-  }
-
-  private static DataField extractPicaDataField(org.marc4j.marc.DataField dataField,
-                                                PicaFieldDefinition definition,
-                                                MarcVersion marcVersion) {
-    DataField field = null;
-    if (definition == null) {
-      field = new DataField(dataField.getTag(),
-        Character.toString(dataField.getIndicator1()),
-        Character.toString(dataField.getIndicator2()),
-        marcVersion
-      );
-    } else {
-      field = new DataField(
-        definition,
-        Character.toString(dataField.getIndicator1()),
-        Character.toString(dataField.getIndicator2())
-      );
-    }
-
-    for (Subfield subfield : dataField.getSubfields()) {
-      var code = Character.toString(subfield.getCode());
-      SubfieldDefinition subfieldDefinition = definition == null ? null : definition.getSubfield(code);
-      MarcSubfield marcSubfield = null;
+      MarcSubfield marcSubfield;
       if (subfieldDefinition == null) {
         marcSubfield = new MarcSubfield(null, code, subfield.getData());
       } else {

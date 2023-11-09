@@ -27,7 +27,6 @@ public class UnimarcSchemaManager {
         return lookup(tag);
     }
 
-
     public UnimarcFieldDefinition lookup(String searchTerm) {
         return fieldDirectory.get(searchTerm);
     }

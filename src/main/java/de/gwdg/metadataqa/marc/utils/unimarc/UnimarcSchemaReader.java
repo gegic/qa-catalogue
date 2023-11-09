@@ -65,7 +65,6 @@ public class UnimarcSchemaReader {
     }
 
     private void processFields(JSONObject obj) {
-
         JSONObject fields = (JSONObject) obj.get("fields");
         for (Map.Entry<String, Object> entry : fields.entrySet()) {
             String tag = entry.getKey();
@@ -87,6 +86,7 @@ public class UnimarcSchemaReader {
             List<SubfieldDefinition> subfieldDefinitions = getSubfields(jsonField);
             fieldDefinition.setSubfieldDefinitions(subfieldDefinitions);
 
+
             schema.add(fieldDefinition);
         }
     }
@@ -98,7 +98,8 @@ public class UnimarcSchemaReader {
     private Indicator getIndicator(int indicatorNumber, JSONObject jsonField) {
         JSONObject jsonIndicator = (JSONObject) jsonField.get("indicator" + indicatorNumber);
         if (jsonIndicator == null) {
-            return null;
+            // Return an empty indicator which represent the empty values in order to conform with MARC21 fields
+            return new Indicator();
         }
 
         Indicator indicator = new Indicator((String) jsonIndicator.get(LABEL));

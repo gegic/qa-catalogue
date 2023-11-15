@@ -155,10 +155,16 @@ public class DataFieldValidator extends AbstractValidator {
         }
       }
       Utils.count(subfield.getDefinition(), counter);
-
-      if (!subfieldValidator.validate(subfield))
+//      checkIfSubfieldDefined(subfield);
+      if (!subfieldValidator.validate(subfield)) {
         errors.addAll(subfieldValidator.getValidationErrors());
+      }
     }
+
+//    // Count the number of subfield definitions using stream api
+//    Map<SubfieldDefinition, Long> counter = subfields.stream()
+//        .filter(subfield -> subfield.getDefinition() != null)
+//        .collect(Collectors.groupingBy(MarcSubfield::getDefinition, Collectors.counting()));
 
     for (Map.Entry<SubfieldDefinition, Integer> entry : counter.entrySet()) {
       SubfieldDefinition subfieldDefinition = entry.getKey();
@@ -168,6 +174,18 @@ public class DataFieldValidator extends AbstractValidator {
       }
     }
 
+  }
+
+  private void checkIfSubfieldDefined(MarcSubfield subfield) {
+    if (subfield.getDefinition() != null) {
+      return;
+    }
+
+    if (definition.isVersionSpecificSubfields(configuration.getMarcVersion(), subfield.getCode())) {
+      subfield.setDefinition(
+          definition.getVersionSpecificSubfield(
+              configuration.getMarcVersion(), subfield.getCode()));
+    }
   }
 
   private void addError(ValidationErrorType type, String message) {

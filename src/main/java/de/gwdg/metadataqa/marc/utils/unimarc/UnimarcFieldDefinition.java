@@ -5,7 +5,6 @@ import de.gwdg.metadataqa.marc.definition.structure.DataFieldDefinition;
 import de.gwdg.metadataqa.marc.definition.structure.Indicator;
 import de.gwdg.metadataqa.marc.definition.structure.SubfieldDefinition;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +15,6 @@ import java.util.Map;
 public class UnimarcFieldDefinition extends DataFieldDefinition {
 
     private final boolean required;
-    private final Map<String, SubfieldDefinition> subfieldDefinitions = new HashMap<>();
-
 
     public UnimarcFieldDefinition(String tag, String label, boolean repeatable, boolean required) {
         this.tag = tag;
@@ -27,13 +24,12 @@ public class UnimarcFieldDefinition extends DataFieldDefinition {
     }
 
     public void setSubfieldDefinitions(List<SubfieldDefinition> subfieldDefinitions) {
-        for (SubfieldDefinition subfieldDefinition : subfieldDefinitions) {
-            this.subfieldDefinitions.put(subfieldDefinition.getCode(), subfieldDefinition);
-        }
+        this.subfields = subfieldDefinitions;
+        this.indexSubfields();
     }
 
     public Map<String, SubfieldDefinition> getSubfieldDefinitions() {
-        return subfieldDefinitions;
+        return subfieldIndex;
     }
 
     public void setInd1(Indicator ind1) {

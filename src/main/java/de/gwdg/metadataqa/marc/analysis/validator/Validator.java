@@ -42,13 +42,18 @@ public class Validator extends AbstractValidator {
   }
 
   public boolean validate(BibliographicRecord bibliographicRecord) {
-    logger.info("Validating record " + bibliographicRecord.getId());
     this.bibliographicRecord = bibliographicRecord;
 
     validationErrors = new ArrayList<>();
-    if (parsingErrors != null && !parsingErrors.isEmpty())
+    if (parsingErrors != null && !parsingErrors.isEmpty()) {
       validationErrors.addAll(parsingErrors);
+    }
 
+    if (bibliographicRecord == null) {
+      return validationErrors.isEmpty();
+    }
+
+    logger.info("Validating record " + bibliographicRecord.getId());
     if (!bibliographicRecord.getSchemaType().equals(SchemaType.PICA)) {
       validateLeader();
     }

@@ -13,7 +13,6 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class UnimarcSchemaReaderTest {
@@ -83,7 +82,7 @@ public class UnimarcSchemaReaderTest {
         Indicator indicator1 = field886.getInd1();
         assertEquals(expectedIndicator1Label, indicator1.getLabel());
         assertEquals(expectedCodesSize, indicator1.getCodes().size());
-        assertNull(field886.getInd2());
+        assertFalse(field886.getInd2().exists());
     }
 
     /**

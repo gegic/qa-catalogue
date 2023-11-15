@@ -86,7 +86,6 @@ public class UnimarcSchemaReader {
             List<SubfieldDefinition> subfieldDefinitions = getSubfields(jsonField);
             fieldDefinition.setSubfieldDefinitions(subfieldDefinitions);
 
-
             schema.add(fieldDefinition);
         }
     }

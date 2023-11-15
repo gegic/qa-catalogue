@@ -5,6 +5,7 @@ import de.gwdg.metadataqa.marc.definition.ValidatorResponse;
 import de.gwdg.metadataqa.marc.definition.general.parser.ParserException;
 import de.gwdg.metadataqa.marc.definition.general.parser.SubfieldContentParser;
 import de.gwdg.metadataqa.marc.definition.structure.ControlfieldPositionDefinition;
+import de.gwdg.metadataqa.marc.definition.structure.DataFieldDefinition;
 import de.gwdg.metadataqa.marc.definition.structure.SubfieldDefinition;
 import de.gwdg.metadataqa.marc.model.validation.ErrorsCollector;
 import de.gwdg.metadataqa.marc.model.validation.ValidationErrorType;
@@ -19,6 +20,7 @@ public class SubfieldValidator extends AbstractValidator {
 
   private ErrorsCollector errors;
   private SubfieldDefinition definition;
+  private DataFieldDefinition fieldDefinition;
   private MarcSubfield subfield;
 
   public SubfieldValidator() {
@@ -30,14 +32,14 @@ public class SubfieldValidator extends AbstractValidator {
   }
 
   public boolean validate(MarcSubfield subfield) {
-    boolean debug = subfield.getCode().equals("7");
-    errors = new ErrorsCollector();
-    validationErrors = new ArrayList<>();
     this.subfield = subfield;
 
+    errors = new ErrorsCollector();
+    validationErrors = new ArrayList<>();
     definition = subfield.getDefinition();
+    fieldDefinition = subfield.getField().getDefinition();
     if (definition == null) {
-      addError(subfield.getField().getDefinition().getTag(), SUBFIELD_UNDEFINED, subfield.getCode());
+      addError(fieldDefinition.getTag(), SUBFIELD_UNDEFINED, subfield.getCode());
       return false;
     } else {
       if (subfield.getCode() == null) {
@@ -122,7 +124,7 @@ public class SubfieldValidator extends AbstractValidator {
   private void addError(String path, ValidationErrorType type, String message) {
     if (!isIgnorableType(type)) {
       String id = subfield.getMarcRecord() == null ? null : subfield.getMarcRecord().getId();
-      String url = definition.getParent().getDescriptionUrl();
+      String url = fieldDefinition.getDescriptionUrl();
       errors.add(id, path, type, message, url);
     }
   }

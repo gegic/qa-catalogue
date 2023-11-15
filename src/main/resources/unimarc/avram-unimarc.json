@@ -14025,6 +14025,72 @@
         }
       }
     },
+    "181": {
+      "tag": "181",
+      "label": "CODED DATA FIELD: CONTENT FORM",
+      "required": false,
+      "repeatable": true,
+      "indicator1": null,
+      "indicator2": {
+        "label": "ISBD Display Indicator",
+        "codes": {
+          "#": "Information not provided, use when the field contains $c.",
+          "0": "Not used to generate displays",
+          "1": "Used to generate displays"
+        }
+      },
+      "subfields": {
+        "a": {
+          "label": "ISBD Content Form Code",
+          "repeatable": false,
+          "positions": {
+            "00": {
+              "label": "Content Form",
+              "start": 0
+            },
+            "01": {
+              "label": "Extent of Applicability",
+              "start": 1
+            }
+          }
+        },
+        "b": {
+          "label": "ISBD Content Qualification Code",
+          "repeatable": true,
+          "positions": {
+            "00": {
+              "label": "Specification of Type",
+              "start": 0
+            },
+            "01": {
+              "label": "Specification of Motion",
+              "start": 1
+            },
+            "02": {
+              "label": "Specification of Dimensionality",
+              "start": 1
+            },
+            "03-05": {
+              "label": "Sensory Specification",
+              "start": 3,
+              "end": 5
+            }
+          }
+        },
+        "c": {
+          "label": "Other Coding for Content Form",
+          "repeatable": true
+        },
+        "2": {
+          "label": "Source",
+          "repeatable": false
+        },
+        "6": {
+          "label": "Interfield Linking Data",
+          "repeatable": true
+        }
+      }
+    },
     "200": {
       "tag": "200",
       "label": "TITLE AND STATEMENT OF RESPONSIBILITY",

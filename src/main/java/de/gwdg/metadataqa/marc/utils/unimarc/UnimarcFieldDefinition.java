@@ -25,6 +25,10 @@ public class UnimarcFieldDefinition extends DataFieldDefinition {
 
     public void setSubfieldDefinitions(List<SubfieldDefinition> subfieldDefinitions) {
         this.subfields = subfieldDefinitions;
+        for (SubfieldDefinition subfieldDefinition : this.subfields) {
+            subfieldDefinition.setParent(this);
+        }
+
         this.indexSubfields();
     }
 

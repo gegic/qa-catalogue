@@ -1,7 +1,6 @@
 package de.gwdg.metadataqa.marc.analysis.validator;
 
 import de.gwdg.metadataqa.marc.MarcSubfield;
-import de.gwdg.metadataqa.marc.Utils;
 import de.gwdg.metadataqa.marc.dao.DataField;
 import de.gwdg.metadataqa.marc.definition.Cardinality;
 import de.gwdg.metadataqa.marc.definition.MarcVersion;
@@ -15,9 +14,9 @@ import de.gwdg.metadataqa.marc.model.validation.ValidationErrorType;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static de.gwdg.metadataqa.marc.model.validation.ValidationErrorType.INDICATOR_INVALID_VALUE;
 import static de.gwdg.metadataqa.marc.model.validation.ValidationErrorType.INDICATOR_NON_EMPTY;
@@ -142,33 +141,24 @@ public class DataFieldValidator extends AbstractValidator {
       return;
     }
 
-    Map<SubfieldDefinition, Integer> counter = new HashMap<>();
     for (MarcSubfield subfield : subfields) {
-      if (subfield.getDefinition() == null) {
-        if (definition.isVersionSpecificSubfields(configuration.getMarcVersion(), subfield.getCode())) {
-          subfield.setDefinition(
-              definition.getVersionSpecificSubfield(
-                  configuration.getMarcVersion(), subfield.getCode()));
-        } else {
-          addError(SUBFIELD_UNDEFINED, subfield.getCode());
-          continue;
-        }
-      }
-      Utils.count(subfield.getDefinition(), counter);
-//      checkIfSubfieldDefined(subfield);
-      if (!subfieldValidator.validate(subfield)) {
+      addVersionSpecificDefinition(subfield);
+      boolean isSubfieldValid = subfieldValidator.validate(subfield);
+
+      if (!isSubfieldValid) {
         errors.addAll(subfieldValidator.getValidationErrors());
       }
     }
 
-//    // Count the number of subfield definitions using stream api
-//    Map<SubfieldDefinition, Long> counter = subfields.stream()
-//        .filter(subfield -> subfield.getDefinition() != null)
-//        .collect(Collectors.groupingBy(MarcSubfield::getDefinition, Collectors.counting()));
+    // Count the number of subfield definitions
+    Map<SubfieldDefinition, Long> counter = subfields.stream()
+        .filter(subfield -> subfield.getDefinition() != null)
+        .collect(Collectors.groupingBy(MarcSubfield::getDefinition, Collectors.counting()));
 
-    for (Map.Entry<SubfieldDefinition, Integer> entry : counter.entrySet()) {
+    // Add errors for all non-repeatable subfields which were repeated
+    for (Map.Entry<SubfieldDefinition, Long> entry : counter.entrySet()) {
       SubfieldDefinition subfieldDefinition = entry.getKey();
-      Integer count = entry.getValue();
+      long count = entry.getValue();
       if (count > 1 && subfieldDefinition.getCardinality().equals(Cardinality.Nonrepeatable)) {
         addError(subfieldDefinition, SUBFIELD_NONREPEATABLE, String.format("there are %d instances", count));
       }
@@ -176,7 +166,11 @@ public class DataFieldValidator extends AbstractValidator {
 
   }
 
-  private void checkIfSubfieldDefined(MarcSubfield subfield) {
+  /**
+   * Adds the definition of the currently specified marc version to the subfield if it exists.
+   * @param subfield The subfield to which the definition should be added
+   */
+  private void addVersionSpecificDefinition(MarcSubfield subfield) {
     if (subfield.getDefinition() != null) {
       return;
     }

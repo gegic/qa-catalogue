@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalInt;
 import java.util.logging.Logger;
 
 /**
@@ -177,6 +178,16 @@ public class UnimarcSchemaReader {
             List<EncodedValue> codes = getCodes(position, "codes");
             positionDefinition.setCodes(codes);
 
+            // Get maximal length of codes
+            OptionalInt maxCodeLength = codes.stream().mapToInt(code -> code.getCode().length()).max();
+            if (maxCodeLength.isPresent()) {
+                // If the maximal length is smaller than the position length, then the position is repeatable
+                boolean isRepeatable = maxCodeLength.getAsInt() < positionEnd - positionStart;
+                positionDefinition.setRepeatableContent(isRepeatable);
+
+                // The unit length is the maximal length of the codes
+                positionDefinition.setUnitLength(maxCodeLength.getAsInt());
+            }
             positionDefinitions.add(positionDefinition);
         }
         return positionDefinitions;

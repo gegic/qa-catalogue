@@ -229,7 +229,7 @@ public class Validator extends AbstractValidator {
     // Get errors for all non-repeatable fields which were repeated
     List<ValidationError> nonRepeatableFieldErrors = repetitionCounter.entrySet().stream()
         .filter(entry -> isNonRepeatableRepeated(entry.getKey(), entry.getValue()))
-        .map(entry -> getNonRepeatableFieldError(entry.getKey(), entry.getValue()))
+        .map(entry -> createNonRepeatableFieldError(entry.getKey(), entry.getValue()))
         .collect(Collectors.toList());
 
     validationErrors.addAll(filterErrors(nonRepeatableFieldErrors));
@@ -240,7 +240,7 @@ public class Validator extends AbstractValidator {
     return count > 1 && fieldDefinition.getCardinality().equals(Cardinality.Nonrepeatable);
   }
 
-  private ValidationError getNonRepeatableFieldError(RepetitionDao dao, Integer count) {
+  private ValidationError createNonRepeatableFieldError(RepetitionDao dao, Integer count) {
     DataFieldDefinition fieldDefinition = dao.getFieldDefinition();
     return new ValidationError(bibliographicRecord.getId(), fieldDefinition.getExtendedTag(),
         ValidationErrorType.FIELD_NONREPEATABLE,

@@ -1864,7 +1864,10 @@
                 "e": "young adult, ages 14-20",
                 "k": "adult, serious",
                 "m": "adult, general",
-                "u": "unknown"
+                "u": "unknown",
+                "x": "not applicable",
+                "// remark": "Blank has to exist, at least for now, in order to indicate that some positions can be blank. What has to be covered is that the codes have to be consecutive from left to right, and when 'x' is specified, then it has to be the first and only code.",
+                "#": "blank"
               }
             },
             "20": {
@@ -2398,10 +2401,11 @@
                 "y": "no transliteration scheme used"
               }
             },
-            "26-29": {
-              "label": "Character Sets (Mandatory)",
+            "// remark": "26-29 is to be split in 26-27 and 28-29 which isn't the case in the manual. This is a better approach to due some differences",
+            "26-27": {
+              "label": "Character Sets G0 set",
               "start": 26,
-              "end": 29,
+              "end": 27,
               "codes": {
                 "01": "ISO 646, IRV version (basic Latin set)",
                 "02": "ISO Registration # 37 (basic Cyrillic set)",
@@ -2417,9 +2421,52 @@
                 "50": "ISO 10646 Level 3 (Unicode, UTF-8)"
               }
             },
-            "30-33": {
-              "label": "Additional Character Sets",
+            "28-29": {
+              "label": "Character Sets G1 set",
+              "start": 28,
+              "end": 29,
+              "codes": {
+                "01": "ISO 646, IRV version (basic Latin set)",
+                "02": "ISO Registration # 37 (basic Cyrillic set)",
+                "03": "ISO 5426 (extended Latin set)",
+                "04": "ISO 5427 (extended Cyrillic set)",
+                "05": "ISO 5428 (Greek set)",
+                "06": "ISO 6438 (African coded character set)",
+                "07": "ISO 10586 (Georgian set)",
+                "08": "ISO 8957 (Hebrew set) Table 1",
+                "09": "ISO 8957 (Hebrew set) Table 2",
+                "10": "[Reserved]",
+                "11": "ISO 5426-2 (Latin characters used in minor European languages and obsolete typography)",
+                "50": "ISO 10646 Level 3 (Unicode, UTF-8)",
+                "// remark": "see the first previous comment. This is because this set of positions can be partially left blank",
+                "##": "blank"
+              }
+            },
+            "// remark": "30-33 is to be split in 30-31 and 32-33 which isn't the case in the manual. This is a better approach to due some differences",
+            "30-31": {
+              "label": "Additional Character Sets G2",
               "start": 30,
+              "end": 31,
+              "codes": {
+                "01": "ISO 646, IRV version (basic Latin set)",
+                "02": "ISO Registration # 37 (basic Cyrillic set)",
+                "03": "ISO 5426 (extended Latin set)",
+                "04": "ISO 5427 (extended Cyrillic set)",
+                "05": "ISO 5428 (Greek set)",
+                "06": "ISO 6438 (African coded character set)",
+                "07": "ISO 10586 (Georgian set)",
+                "08": "ISO 8957 (Hebrew set) Table 1",
+                "09": "ISO 8957 (Hebrew set) Table 2",
+                "10": "[Reserved]",
+                "11": "ISO 5426-2 (Latin characters used in minor European languages and obsolete typography)",
+                "50": "ISO 10646 Level 3 (Unicode, UTF-8)",
+                "// remark": "see the first previous comment. This is because this set of positions can be partially left blank",
+                "##": "blank"
+              }
+            },
+            "32-33": {
+              "label": "Additional Character Sets G3",
+              "start": 32,
               "end": 33,
               "codes": {
                 "01": "ISO 646, IRV version (basic Latin set)",
@@ -2433,7 +2480,9 @@
                 "09": "ISO 8957 (Hebrew set) Table 2",
                 "10": "[Reserved]",
                 "11": "ISO 5426-2 (Latin characters used in minor European languages and obsolete typography)",
-                "50": "ISO 10646 Level 3 (Unicode, UTF-8)"
+                "50": "ISO 10646 Level 3 (Unicode, UTF-8)",
+                "// remark": "see the comment before the 30-31 position. This is because this set of positions can be partially left blank",
+                "##": "blank"
               }
             },
             "34-35": {

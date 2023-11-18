@@ -28,6 +28,7 @@ public class UnimarcSchemaReader {
     private static final String REQUIRED = "required";
     private static final String START = "start";
     private static final String END = "end";
+    private static final String UNIMARC_EMPTY_CODE = "#";
 
     private static final Logger logger = Logger.getLogger(UnimarcSchemaReader.class.getCanonicalName());
     private final JSONParser parser = new JSONParser(JSONParser.MODE_RFC4627);
@@ -196,6 +197,7 @@ public class UnimarcSchemaReader {
     /**
      * Retrieves the codes from the JSON object
      * @param codesHolder Meant to be either an indicator or a position
+     * @param objectKey The key of the codes object, "codes" or "codelist"
      * @return A list of codes
      */
     private List<EncodedValue> getCodes(JSONObject codesHolder, String objectKey) {
@@ -208,8 +210,23 @@ public class UnimarcSchemaReader {
             String code = codeEntry.getKey();
             String codeLabel = (String) codes.get(code);
 
+            if (code.startsWith("//")) {
+                continue;
+            }
+
             EncodedValue encodedValue = new EncodedValue(code, codeLabel);
             encodedValues.add(encodedValue);
+
+            // In case of an empty code, and the empty code isn't only a whitespace, then add whitespace as well
+            // This could potentially be done within one single EncodedValue
+            // check if code marches UNIMARC_EMPTY_CODE multiple times using regex
+            boolean isUnimarcEmptyCode = code.matches("^" + UNIMARC_EMPTY_CODE + "+$");
+            if (isUnimarcEmptyCode && !code.isBlank()) {
+                // Create a whitespace of that many spaces as the empty code has characters
+                String whitespace = " ".repeat(code.length());
+                EncodedValue emptyCode = new EncodedValue(whitespace, codeLabel);
+                encodedValues.add(emptyCode);
+            }
         }
 
         return encodedValues;

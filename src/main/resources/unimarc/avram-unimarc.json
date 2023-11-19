@@ -1,5 +1,149 @@
 {
   "fields": {
+    "LEADER": {
+      "repeatable": false,
+      "positions": {
+        "00-04": {
+          "label": "Record length",
+          "start": 0,
+          "end": 4
+        },
+        "05": {
+          "label": "Record status",
+          "start": 5,
+          "codes": {
+            "c": "Corrected record",
+            "d": "Deleted record",
+            "n": "New record",
+            "o": "Previously issued higher level record",
+            "p": "Previously issued as an incomplete, pre-publication record"
+          }
+        },
+        "06": {
+          "label": "Type of record",
+          "start": 6,
+          "codes": {
+            "a": "Language materials, except manuscript",
+            "b": "Language materials, manuscript",
+            "c": "Notated music, except manuscript",
+            "d": "Notated music, manuscript",
+            "e": "Cartographic resources, except manuscript",
+            "f": "Cartographic resources, manuscript",
+            "g": "Projected and video resources",
+            "i": "Sound recordings, non-musical",
+            "j": "Sound recordings, musical",
+            "k": "Two-dimensional graphics",
+            "l": "Electronic resource",
+            "m": "Multimedia",
+            "r": "Three-dimensional artefacts"
+          }
+        },
+        "07": {
+          "label": "Bibliographic level",
+          "start": 7,
+          "codes": {
+             "a": "Analytic component part",
+             "i": "Integrating resource",
+             "m": "Monographic",
+             "s": "Serial",
+             "c": "Collection"
+          }
+        },
+        "08": {
+          "label": "Hierarchical level code",
+          "start": 8,
+          "codes": {
+             "#": "Hierarchical relationship undefined",
+             "0": "No hierarchical relationship",
+             "1": "Highest level record",
+             "2": "Record below highest level (all levels below)"
+          }
+        },
+        "09": {
+          "label": "Type of control",
+          "start": 9,
+          "codes": {
+             "#": "No specified type",
+             "a": "Archival",
+             "m": "Museum"
+          }
+        },
+        "10": {
+          "label": "Indicator length",
+          "start": 10,
+          "codes": {
+            "2": "Number of character positions used for indicators"
+          }
+        },
+        "11": {
+          "label": "Subfield identifier length",
+          "start": 11,
+          "codes": {
+            "2": "Number of character positions used for a subfield identifier"
+          }
+        },
+        "12-16": {
+          "label": "Base address of data",
+          "start": 12,
+          "end": 16
+        },
+        "17": {
+          "label": "Encoding level",
+          "start": 17,
+          "codes": {
+             "#": "Full level",
+             "1": "Sublevel 1",
+             "2": "Sublevel 2",
+             "3": "Sublevel 3"
+          }
+        },
+        "18": {
+          "label": "Descriptive Cataloguing Form",
+          "start": 18,
+          "codes": {
+            "#": "(Blank) record is in full ISBD form",
+            "i": "Record is in partial or incomplete ISBD form",
+            "n": "Record is in non-ISBD form",
+            "x": "ISBD provisions are not applicable to the type of resource (e.g., unpublished resources)"
+          }
+        },
+        "19": {
+          "label": "Undefined",
+          "start": 19,
+          "codes": {
+            "#": "Blank"
+          }
+        },
+        "20": {
+          "label": "Length of 'Length of Field'",
+          "start": 20,
+          "codes": {
+            "4": "Number of characters in the length-of-field portion of a Directory entry"
+          }
+        },
+        "21": {
+          "label": "Length of 'Starting Character Position'",
+          "start": 21,
+          "codes": {
+            "5": "Number of characters in the starting-character-position portion of a Directory entry"
+          }
+        },
+        "22": {
+          "label": "Length of Implementation-Defined Portion",
+          "start": 22,
+          "codes": {
+            "0": "Number of characters in the implementation-defined portion of a Directory entry"
+          }
+        },
+        "23": {
+          "label": "Undefined",
+          "start": 23,
+          "codes": {
+            "#": "Blank"
+          }
+        }
+      }
+    },
     "001": {
       "tag": "001",
       "label": "RECORD IDENTIFIER",
@@ -263,6 +407,10 @@
           "repeatable": false
         }
       }
+    },
+    "018": {
+      "tag": "018",
+      "label": "[RESERVED]"
     },
     "020": {
       "tag": "020",
@@ -1079,6 +1227,24 @@
         },
         "z": {
           "label": "Erroneous Number",
+          "repeatable": true
+        }
+      }
+    },
+    "033": {
+      "tag": "033",
+      "label": "OTHER SYSTEM PERSISTENT RECORD IDENTIFIER",
+      "required": false,
+      "repeatable": true,
+      "indicator1": null,
+      "indicator2": null,
+      "subfields": {
+        "a": {
+          "label": "Persistent Record Identifier",
+          "repeatable": false
+        },
+        "z": {
+          "label": "Cancelled or Invalid Persistent Record Identifier",
           "repeatable": true
         }
       }
@@ -7804,7 +7970,7 @@
                 "i": "coats of arms",
                 "j": "genealogical tables",
                 "k": "forms",
-                "1": "samples",
+                 "l": "samples",
                 "m": "sound recordings",
                 "n": "transparencies",
                 "o": "illuminations",
@@ -7828,7 +7994,7 @@
                 "i": "statistics",
                 "j": "programmed text book",
                 "k": "patent",
-                "1": "standard",
+                 "l": "standard",
                 "m": "dissertation or thesis (original)",
                 "n": "laws and legislation",
                 "o": "numeric table",
@@ -7947,7 +8113,7 @@
       "indicator2": null,
       "subfields": {
         "a": {
-          "label": "Continuing resource Coded Data",
+          "label": "Continuing Resource Coded Data",
           "repeatable": false,
           "positions": {
             "00": {
@@ -7980,7 +8146,7 @@
                 "i": "three times a year",
                 "j": "semiannual (twice a year)",
                 "k": "annual",
-                "1": "biennial (every two years)",
+                "l": "biennial (every two years)",
                 "m": "triennial (every three years)",
                 "n": "three times a week",
                 "o": "three times a month",
@@ -8017,7 +8183,7 @@
                 "i": "statistics",
                 "j": "programmed texts",
                 "k": "reviews",
-                "1": "laws and legislation",
+                "l": "laws and legislation",
                 "m": "law reports and digests",
                 "n": "legal articles",
                 "o": "legal cases and case notes",
@@ -8044,7 +8210,7 @@
                 "i": "statistics",
                 "j": "programmed texts",
                 "k": "reviews",
-                "1": "laws and legislation",
+                "l": "laws and legislation",
                 "m": "law reports and digests",
                 "n": "legal articles",
                 "o": "legal cases and case notes",
@@ -8118,6 +8284,10 @@
           }
         }
       }
+    },
+    "111": {
+      "tag": "111",
+      "label": "CODED DATA FIELD: SERIALS – PHYSICAL ATTRIBUTES [OBSOLETE]"
     },
     "115": {
       "tag": "115",
@@ -8231,7 +8401,7 @@
                 "i": "other filmstrip type",
                 "j": "film strip roll",
                 "k": "slide, slide set, stereograph",
-                "1": "transparency",
+                 "l": "transparency",
                 "u": "unknown",
                 "x": "not a motion picture or visual projection",
                 "z": "other forms of release"
@@ -9140,6 +9310,7 @@
               "end": 3,
               "codes": {
                 "// remark": "01-99 = number of bands",
+                "01-99": "number of bands",
                 "xx": "not applicable"
               }
             },
@@ -9181,6 +9352,7 @@
               "codes": {
                 "-": "less than 1 centimeter",
                 "// remark": "1-9 numeric value",
+                "1-9": "numeric value",
                 "+": "greater than 9 kilometers",
                 "x": "not applicable"
               }
@@ -12712,6 +12884,7 @@
               "end": 7,
               "codes": {
                 "// remark": "001-999 = Exact bit depth",
+                "001-999": "Exact bit depth",
                 "mmm": "Multiple (more than one image type)",
                 "nnn": "Not applicable",
                 "---": "Unknown"
@@ -13394,7 +13567,7 @@
     },
     "145": {
       "tag": "145",
-      "label": "CODED DATA FIELD: MEDIUM OF PERFORMANCE",
+      "label": "CODED DATA FIELD: MEDIUM OF PERFORMANCE [OBSOLETE]",
       "required": false,
       "repeatable": true,
       "indicator1": {
@@ -13765,6 +13938,691 @@
               "end": 7,
               "codes": {
                 "// remark": "these repeated keys will have to be addressed",
+                "0": "tenth",
+                "1": "eleventh",
+                "2": "twelfth",
+                "5": "fifth",
+                "6": "sixth",
+                "7": "seventh",
+                "8": "eighth",
+                "9": "ninth",
+                "a": "alto",
+                "b": "bass",
+                "c": "contrabass",
+                "d": "midi",
+                "e": "electric",
+                "f": "amplified",
+                "g": "sub-contrabass",
+                "h": "high",
+                "i": "six hands",
+                "j": "eight hands",
+                "k": "recorded",
+                "l": "low",
+                "m": "medium",
+                "n": "sopranino",
+                "o": "one hand",
+                "p": "sopracute",
+                "q": "antiquity",
+                "r": "baritone",
+                "s": "soprano",
+                "t": "tenor",
+                "u": "three hands",
+                "v": "four hands",
+                "w": "two players on one instrument",
+                "x": "electronic ",
+                "y": "ethinc, traditional",
+                "z": "prepared",
+                "#": "not specified – position not required",
+                "1-9": "internal group identifier",
+                "//0": "internal group indicator (order of group notspecified)",
+                "//a": "solo (as opposite to non-soloinstruments/voices)",
+                "//b": "ad libitum",
+                "//c": "may take pace of the preceding code / alternative",
+                "//d": "used by the same player as the preceding code"
+              }
+            }
+          }
+        },
+        "c": {
+          "label": "Type of ensemble",
+          "repeatable": true,
+          "positions": {
+            "00-01": {
+              "label": "No. of instruments or voices",
+              "start": 0,
+              "end": 1
+            },
+            "02-04": {
+              "label": "Type of instrument or voice",
+              "start": 2,
+              "end": 4,
+              "codes": {
+                "cch": "children’s choir",
+                "cme": "men’s choir",
+                "cmi": "mixed choir",
+                "cre": "reciting choir",
+                "cve": "vocal ensemble",
+                "cwo": "women’ s choir",
+                "cun": "choir",
+                "czz": "choir - other",
+                "oba": "band",
+                "obi": "big band",
+                "obr": "brass band",
+                "och": "chamber orchestra",
+                "oco": "combo",
+                "odo": "dance orchestra",
+                "ofu": "full orchestra",
+                "oga": "gamelan",
+                "oie": "instrumental ensemble",
+                "oja": "jazz band",
+                "ope": "percussion orchestra",
+                "orb": "ragtime band",
+                "osb": "steel band",
+                "ost": "string orchestra",
+                "owi": "wind orchestra",
+                "oun": "orchestra - unspecified",
+                "ozz": "orchestra - other"
+              }
+            },
+            "05-07": {
+              "label": "Suffix",
+              "start": 5,
+              "end": 7,
+              "codes": {
+                "// remark": "these repeated keys will have to be addressed",
+                "0": "tenth",
+                "1": "eleventh",
+                "2": "twelfth",
+                "5": "fifth",
+                "6": "sixth",
+                "7": "seventh",
+                "8": "eighth",
+                "9": "ninth",
+                "a": "alto",
+                "b": "bass",
+                "c": "contrabass",
+                "d": "midi",
+                "e": "electric",
+                "f": "amplified",
+                "g": "sub-contrabass",
+                "h": "high",
+                "i": "six hands",
+                "j": "eight hands",
+                "k": "recorded",
+                "l": "low",
+                "m": "medium",
+                "n": "sopranino",
+                "o": "one hand",
+                "p": "sopracute",
+                "q": "antiquity",
+                "r": "baritone",
+                "s": "soprano",
+                "t": "tenor",
+                "u": "three hands",
+                "v": "four hands",
+                "w": "two players on one instrument",
+                "x": "electronic ",
+                "y": "ethinc, traditional",
+                "z": "prepared",
+                "#": "not specified – position not required",
+                "1-9": "internal group identifier",
+                "//0": "internal group indicator (order of group notspecified)",
+                "//a": "solo (as opposite to non-soloinstruments/voices)",
+                "//b": "ad libitum",
+                "//c": "may take pace of the preceding code / alternative",
+                "//d": "used by the same player as the preceding code"
+              }
+            }
+          }
+        },
+        "d": {
+          "label": "Group within larger ensemble",
+          "repeatable": true,
+          "positions": {
+            "00-01": {
+              "label": "No. of real parts of ensemble",
+              "start": 0,
+              "end": 1
+            },
+            "02-04": {
+              "label": "Type of instrument or voice",
+              "start": 2,
+              "end": 4,
+              "codes": {
+                "cch": "children’s choir",
+                "cme": "men’s choir",
+                "cmi": "mixed choir",
+                "cre": "reciting choir",
+                "cve": "vocal ensemble",
+                "cwo": "women’ s choir",
+                "cun": "choir",
+                "czz": "choir - other",
+                "oba": "band",
+                "obi": "big band",
+                "obr": "brass band",
+                "och": "chamber orchestra",
+                "oco": "combo",
+                "odo": "dance orchestra",
+                "ofu": "full orchestra",
+                "oga": "gamelan",
+                "oie": "instrumental ensemble",
+                "oja": "jazz band",
+                "ope": "percussion orchestra",
+                "orb": "ragtime band",
+                "osb": "steel band",
+                "ost": "string orchestra",
+                "owi": "wind orchestra",
+                "oun": "orchestra - unspecified",
+                "ozz": "orchestra - other"
+              }
+            },
+            "05-07": {
+              "label": "Suffix",
+              "start": 5,
+              "end": 7,
+              "codes": {
+                "// remark": "these repeated keys will have to be addressed",
+                "0": "tenth",
+                "1": "eleventh",
+                "2": "twelfth",
+                "5": "fifth",
+                "6": "sixth",
+                "7": "seventh",
+                "8": "eighth",
+                "9": "ninth",
+                "a": "alto",
+                "b": "bass",
+                "c": "contrabass",
+                "d": "midi",
+                "e": "electric",
+                "f": "amplified",
+                "g": "sub-contrabass",
+                "h": "high",
+                "i": "six hands",
+                "j": "eight hands",
+                "k": "recorded",
+                "l": "low",
+                "m": "medium",
+                "n": "sopranino",
+                "o": "one hand",
+                "p": "sopracute",
+                "q": "antiquity",
+                "r": "baritone",
+                "s": "soprano",
+                "t": "tenor",
+                "u": "three hands",
+                "v": "four hands",
+                "w": "two players on one instrument",
+                "x": "electronic ",
+                "y": "ethinc, traditional",
+                "z": "prepared",
+                "#": "not specified – position not required",
+                "1-9": "internal group identifier",
+                "//0": "internal group indicator (order of group notspecified)",
+                "//a": "solo (as opposite to non-soloinstruments/voices)",
+                "//b": "ad libitum",
+                "//c": "may take pace of the preceding code / alternative",
+                "//d": "used by the same player as the preceding code"
+              }
+            }
+          }
+        },
+        "e": {
+          "label": "Number of parts",
+          "repeatable": true,
+          "positions": {
+            "00-02": {
+              "label": "No. of instruments or voices",
+              "start": 0,
+              "end": 2
+            },
+            "03": {
+              "label": "Suffix",
+              "start": 3,
+              "end": null,
+              "codes": {
+                "a": "total number of performers",
+                "b": "brass instruments",
+                "c": "choirs",
+                "d": "wind instruments",
+                "e": "electro-acoustic instruments",
+                "g": "groups within larger ensemble",
+                "i": "instruments (not specified)",
+                "j": "solo instruments",
+                "k": "keyboard instruments",
+                "l": "solo voices",
+                "m": "miscellaneous, other instruments",
+                "o": "orchestras",
+                "p": "percussion instruments",
+                "q": "conductors",
+                "s": "bowed string instruments",
+                "t": "plucked string instrument",
+                "v": "voices (not specified)",
+                "w": "woodwind instruments",
+                "x": "choral voices",
+                "y": "ensemble instruments",
+                "z": "devices, other performers"
+              }
+            }
+          }
+        },
+        "f": {
+          "label": "Number of players For suffixes",
+          "repeatable": true,
+          "positions": {
+            "00-02": {
+              "label": "No. of instruments or voices",
+              "start": 0,
+              "end": 2
+            },
+            "03": {
+              "label": "Suffix",
+              "start": 3,
+              "end": null,
+              "codes": {
+                "a": "total number of performers",
+                "b": "brass instruments",
+                "c": "choirs",
+                "d": "wind instruments",
+                "e": "electro-acoustic instruments",
+                "g": "groups within larger ensemble",
+                "i": "instruments (not specified)",
+                "j": "solo instruments",
+                "k": "keyboard instruments",
+                "l": "solo voices",
+                "m": "miscellaneous, other instruments",
+                "o": "orchestras",
+                "p": "percussion instruments",
+                "q": "conductors",
+                "s": "bowed string instruments",
+                "t": "plucked string instrument",
+                "v": "voices (not specified)",
+                "w": "woodwind instruments",
+                "x": "choral voices",
+                "y": "ensemble instruments",
+                "z": "devices, other performers"
+              }
+            }
+          }
+        }
+      }
+    },
+    "146": {
+      "tag": "146",
+      "label": "CODED DATA FIELD: MEDIUM OF PERFORMANCE",
+      "required": false,
+      "repeatable": true,
+      "indicator1": {
+        "label": "Arrangement indicator",
+        "codes": {
+          "0": "Original composition",
+          "1": "Arranged composition"
+        }
+      },
+      "indicator2": {
+        "label": "Alternative medium indicator",
+        "codes": {
+          "#": "Not applicable",
+          "1": "Alternative medium of performance"
+        }
+      },
+      "subfields": {
+        "a": {
+          "label": "Type of performance medium",
+          "repeatable": false,
+          "codelist": {
+            "a": "vocal a capella music",
+            "b": "instrumental music",
+            "c": "vocal and instrumental music",
+            "d": "electroacoustic music",
+            "e": "mixed media music",
+            "u": "undefined, variable",
+            "z": "other"
+          }
+        },
+        "b": {
+          "label": "Instrument or Voice Soloist",
+          "repeatable": true,
+          "positions": {
+            "00-01": {
+              "label": "No. of instruments or voices",
+              "start": 0,
+              "end": 1
+            },
+            "02-04": {
+              "label": "Category of instrument or voice",
+              "start": 2,
+              "end": 4,
+              "codes": {
+                "// remark": "to be updated from http://www.urfm.braidense.it/risorse/searchmedium_en.php",
+                "val": "alto",
+                "vbr": "baritone",
+                "vbs": "bass",
+                "vca": "child alto",
+                "vcl": "contratenor altus",
+                "vcs": "child soprano",
+                "vct": "countertenor",
+                "vcv": "child voice",
+                "vma": "man’s voice",
+                "vms": "mezzosoprano",
+                "vrc": "reciting child’s voice",
+                "vre": "reciting voice",
+                "vrm": "reciting man’s voice",
+                "vrw": "reciting woman’s voice",
+                "vso": "soprano",
+                "vte": "tenor",
+                "vun": "voiceunspecified",
+                "vvg": "vagans",
+                "vwo": "woman’s voice",
+                "vzz": "voice - other",
+                "wau": "aulos",
+                "wba": "bassoon",
+                "wbh": "basset-horn",
+                "wbn": "bassanello",
+                "wbp": "bagpipe",
+                "wch": "chalumeau",
+                "wcl": "clarinet",
+                "wcm": "ciaramella",
+                "wcr": "cromorne",
+                "wdb": "double bassoon",
+                "wdp": "doppione",
+                "wdu": "dulcian",
+                "wdv": "dvojnice",
+                "weh": "english horn",
+                "wfa": "flauto d'amore",
+                "wfg": "flageolet",
+                "wfi": "fife",
+                "wfl": "flute",
+                "wga": "tabor pipe",
+                "wge": "cor de chamois",
+                "whp": "pibgorn",
+                "wmo": "mouth organ",
+                "wmu": "musette",
+                "wna": "ney",
+                "woa": "oboe d'amore",
+                "wob": "oboe",
+                "woh": "oboe da caccia",
+                "wpi": "piccolo",
+                "wpo": "pommer",
+                "wpp": "panpipes",
+                "wra": "racket",
+                "wre": "recorder",
+                "wro": "rothophone",
+                "wsa": "saxophone",
+                "wsh": "shakuhashi",
+                "wsr": "sarrusophone",
+                "wsu": "sordun",
+                "wvu": "voce umana",
+                "wun": "woodwind - unspecified",
+                "wzz": "woodwind - other",
+                "bah": "alphorn",
+                "bbb": "bombardino",
+                "bbd": "bombardon",
+                "bbh": "bersag horn",
+                "bbu": "bugle",
+                "bca": "carnyx",
+                "bcb": "cimbasso",
+                "bch": "corno di toro",
+                "bcl": "clarion",
+                "bco": "cornet",
+                "bct": "cornett",
+                "bcu": "cornu",
+                "bdx": "duplex",
+                "beu": "euphonium",
+                "bhh": "hunting horn",
+                "bho": "horn",
+                "bht": "herald's trumpet",
+                "bkb": "keyed bugle",
+                "blu": "lur",
+                "bol": "oliphant",
+                "bop": "ophicleide",
+                "bph": "post horn",
+                "brh": "russian horn",
+                "bse": "serpent",
+                "bsh": "shofar",
+                "bsx": "salpinx",
+                "bta": "tuba (antique)",
+                "btb": "trombone",
+                "btr": "trumpet",
+                "btu": "tuba",
+                "bvb": "valved bugle",
+                "bwt": "Wagner tuba",
+                "bun": "brass - unspecified",
+                "bzz": "brass - others",
+                "sar": "arpeggione",
+                "sba": "baryton",
+                "sbt": "bassett",
+                "sbu": "bumbass",
+                "scr": "crwth",
+                "sdb": "double bass",
+                "sfi": "fiddle, viol",
+                "sgu": "gusle",
+                "sli": "lira da braccio",
+                "sln": "lirone",
+                "sny": "keyed fiddle",
+                "sob": "octobass",
+                "spo": "kit",
+                "spv": "quinton",
+                "sre": "rebec",
+                "stm": "trumpet marine",
+                "sva": "viola",
+                "svc": "cello",
+                "svd": "viola d’amore",
+                "sve": "violone",
+                "svg": "viola da gamba",
+                "svl": "violin",
+                "svp": "viola pomposa",
+                "sun": "string - unspecified",
+                "szz": "string - other",
+                "tal": "archlute",
+                "tat": "harp-psaltery",
+                "tbb": "barbitos",
+                "tbi": "biwa",
+                "tbj": "banjo",
+                "tbl": "balalaika",
+                "tbo": "bouzouki",
+                "tch": "chitarrone",
+                "tci": "cittern",
+                "tcs": "colascione",
+                "tct": "citole",
+                "tcz": "cobza",
+                "tgu": "guitar",
+                "tha": "harp",
+                "thg": "chitarra hawaiana",
+                "tkh": "kithara",
+                "tko": "kora",
+                "tlf": "lute (family)",
+                "tlg": "lyre-guitar",
+                "tlu": "lute",
+                "tma": "mandolin",
+                "tmd": "mandore",
+                "tps": "psaltery (plucked)",
+                "tpx": "phorminx",
+                "tqa": "qanum",
+                "tth": "theorbo",
+                "ttn": "tanbur",
+                "tud": "'ud",
+                "tuk": "ukulele",
+                "tvi": "vihuela",
+                "tzi": "zither",
+                "tun": "plucked - unspecified",
+                "tzz": "plucked - other",
+                "kab": "archicembalo",
+                "kac": "accordion",
+                "kba": "bandoneon",
+                "kca": "carillon (with keyboard)",
+                "kce": "celesta",
+                "kch": "chordette",
+                "kcl": "clavichord",
+                "kco": "claviorgan",
+                "kcy": "clavicytherium",
+                "kfp": "fortepiano",
+                "kgl": "glockenspiel (with keyboard)",
+                "khm": "harmonium",
+                "khp": "harpsichord",
+                "kmp": "melopiano",
+                "kor": "organ",
+                "kpf": "piano",
+                "kps": "plucked string keyboard",
+                "kre": "regals",
+                "ksi": "sirenion",
+                "ksp": "sostenente piano",
+                "kst": "spinet",
+                "kvg": "virginal",
+                "kun": "keyboard - unspecified",
+                "kxx": "keyboard - other",
+                "pab": "aeolian bells",
+                "pad": "arabian drum",
+                "pag": "agogo",
+                "pan": "anvil",
+                "pbb": "boobams",
+                "pbd": "bass drum",
+                "pbe": "tambourin de Bearn",
+                "pbl": "bells",
+                "pbo": "bongos",
+                "pbp": "metal bells plate",
+                "pbr": "bronte",
+                "pca": "castanets",
+                "pcb": "cabaca",
+                "pcc": "chinese cymbals",
+                "pcg": "conga",
+                "pch": "chains",
+                "pci": "cimbalom",
+                "pco": "chocalho",
+                "pcr": "crash cymbal",
+                "pct": "crotales",
+                "pcu": "cuica",
+                "pcv": "claves",
+                "pcw": "cowbell",
+                "pcy": "cymbals",
+                "pdr": "drum",
+                "pds": "drums",
+                "pfc": "finger cymbals",
+                "pfd": "friction drum",
+                "pfl": "flexatone",
+                "pgl": "glockenspiel",
+                "pgn": "canon",
+                "pgo": "gong",
+                "pgu": "guiro",
+                "pha": "hammer",
+                "phb": "handbell",
+                "phh": "hi-hat",
+                "pir": "intonarumori",
+                "pje": "jembe",
+                "pji": "jingles",
+                "pli": "lithophone",
+                "plj": "lujon",
+                "pmb": "marimba",
+                "pmc": "maracas",
+                "pmd": "military drum",
+                "pme": "metallophone",
+                "pnv": "nail violin",
+                "pra": "ratchett",
+                "prs": "rain stick",
+                "prt": "roto-toms",
+                "psc": "sizzle cymbals",
+                "pse": "sound-effect instrument",
+                "psl": "slit-drum",
+                "psm": "sistrum",
+                "psn": "sirene",
+                "psp": "sandpaper",
+                "pss": "sound sculpture",
+                "pst": "steel drum",
+                "psw": "switch whip",
+                "pta": "tablas",
+                "ptb": "tabor",
+                "ptc": "turkish crescent",
+                "pte": "temple block",
+                "ptg": "tuned gong",
+                "pti": "timpani",
+                "ptl": "triangle",
+                "ptm": "thunder machine",
+                "pto": "tarol",
+                "ptr": "tambourine",
+                "ptt": "tom-tom",
+                "pvi": "vibraphone",
+                "pvs": "vibra-slap",
+                "pwh": "whip",
+                "pwm": "wind machine",
+                "pwo": "woodblocks",
+                "pxr": "xylorimba",
+                "pxy": "xylophone",
+                "pza": "zarb",
+                "pun": "percussion - unspecified",
+                "pzz": "percussion - other",
+                "eco": "computer",
+                "ecs": "computerized musical station",
+                "ect": "computerized tape",
+                "eds": "digital space device",
+                "eea": "electro-acoustic device",
+                "eli": "live electronic",
+                "ely": "lyricon",
+                "ema": "ondes Martenot",
+                "eme": "meta-instrument",
+                "emu": "multimedial device",
+                "eos": "oscillator",
+                "esp": "space device",
+                "esy": "synthesizer",
+                "eta": "tape",
+                "eth": "theremin",
+                "eun": "electronic - non specirfied",
+                "ezz": "electronic - other",
+                "mah": "aeolian harp",
+                "mbo": "barrel organ",
+                "mbr": "bullroarer",
+                "mbs": "bass (Instrument)",
+                "mbw": "musical bow",
+                "mbx": "musical box",
+                "mck": "chekker",
+                "mcl": "musical clock",
+                "mco": "continuo",
+                "mgh": "glassharmonika",
+                "mha": "harmonica",
+                "mhg": "hurdy-gurdy",
+                "mjh": "jew's harp",
+                "mla": "lamellophone",
+                "mmc": "monochord",
+                "mme": "melodica",
+                "mmi": "mirliton",
+                "mml": "melodic instrument",
+                "mms": "musical saw",
+                "moc": "ocarina",
+                "mpo": "polyphonic instrument",
+                "mpp": "player piano",
+                "mra": "rabab",
+                "msw": "swanee whistle",
+                "mtf": "tuning-fork",
+                "mui": "instrument - non specified",
+                "mwd": "wind instrument",
+                "mwh": "whistle",
+                "mun": "instrument or voice, non specified",
+                "mzz": "other",
+                "qch": "choir conductor, chorus master",
+                "qco": "conductor",
+                "qce": "live electronic conductor",
+                "qlc": "light conductor",
+                "qzz": "conductor - other",
+                "zab": "acrobat",
+                "zat": "actor",
+                "zaw": "actress",
+                "zac": "child actor",
+                "zda": "dancer",
+                "zel": "light engineer",
+                "zmi": "mime",
+                "zas": "attore muto",
+                "zes": "sound engineer",
+                "zju": "juggler",
+                "zwp": "walk-on part",
+                "zzz": "performer - other"
+              }
+            },
+            "05-08": {
+              "label": "Other details",
+              "start": 5,
+              "end": 8,
+              "codes": {
+                "// remark": "these repeated keys will have to be addressed",
+                "// remark1": "To be updated from http://www.urfm.braidense.it/risorse/searchmedium_en.php",
                 "0": "tenth",
                 "1": "eleventh",
                 "2": "twelfth",

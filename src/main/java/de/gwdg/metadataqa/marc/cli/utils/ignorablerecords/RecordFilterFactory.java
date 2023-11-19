@@ -11,9 +11,13 @@ public class RecordFilterFactory {
     if (allowableRecordsInput.startsWith("base64:"))
       allowableRecordsInput = Utils.base64decode(allowableRecordsInput);
 
-    if (type.equals(SchemaType.MARC21) || type.equals(SchemaType.UNIMARC)) {
+    if (type.equals(SchemaType.MARC21)) {
       return new RecordFilterMarc21(allowableRecordsInput);
     } else if (type.equals(SchemaType.PICA)) {
+      return new RecordFilterPica(allowableRecordsInput);
+    }
+    else if (type.equals(SchemaType.UNIMARC)) {
+      // TODO: Implement
       return new RecordFilterPica(allowableRecordsInput);
     } else {
       throw new IllegalArgumentException("Unsupported schema type");

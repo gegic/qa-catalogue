@@ -105,7 +105,7 @@ public class BibliographicRecordTest {
   @Test
   public void testMultiple007() throws Exception {
     BibliographicRecord marcRecord = new Marc21Record("010000011");
-    marcRecord.setLeader(new Leader("00860cam a22002774a 45 0"));
+    marcRecord.setLeader(new Marc21Leader("00860cam a22002774a 45 0"));
     marcRecord.setControl003(new Control003("DE-627"));
     marcRecord.setControl005(new Control005("20180502143346.0"));
     marcRecord.setControl008(new Control008("861106s1985    xx |||||      10| ||ger c", marcRecord.getType()));

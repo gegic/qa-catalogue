@@ -4,9 +4,9 @@ import de.gwdg.metadataqa.marc.MarcFactory;
 import de.gwdg.metadataqa.marc.cli.parameters.MarcToSolrParameters;
 import de.gwdg.metadataqa.marc.cli.utils.RecordIterator;
 import de.gwdg.metadataqa.marc.dao.DataField;
-import de.gwdg.metadataqa.marc.dao.Leader;
-import de.gwdg.metadataqa.marc.dao.record.Marc21Record;
+import de.gwdg.metadataqa.marc.dao.Marc21Leader;
 import de.gwdg.metadataqa.marc.dao.record.BibliographicRecord;
+import de.gwdg.metadataqa.marc.dao.record.Marc21Record;
 import de.gwdg.metadataqa.marc.datastore.EmbeddedSolrClientFactory;
 import de.gwdg.metadataqa.marc.definition.MarcFormat;
 import de.gwdg.metadataqa.marc.definition.MarcVersion;
@@ -48,7 +48,7 @@ public class MarcToSolrTest {
   @Test
   public void testVersionSpecificSubfield() {
     BibliographicRecord marcRecord = new Marc21Record("010000011");
-    marcRecord.setLeader(new Leader("00860cam a22002774a 45 0"));
+    marcRecord.setLeader(new Marc21Leader("00860cam a22002774a 45 0"));
     marcRecord.addDataField(new DataField(Tag787.getInstance(), " ", " ","@", "japan"));
     Map<String, List<String>> solr = marcRecord.getKeyValuePairs(SolrFieldType.MIXED, false, MarcVersion.KBR);
     assertTrue(solr.containsKey("787x40_RelatedTo_language_KBR"));

@@ -3,7 +3,7 @@ package de.gwdg.metadataqa.marc.cli.utils;
 import de.gwdg.metadataqa.marc.MarcFactory;
 import de.gwdg.metadataqa.marc.cli.parameters.CommonParameters;
 import de.gwdg.metadataqa.marc.cli.processor.BibliographicInputProcessor;
-import de.gwdg.metadataqa.marc.dao.Leader;
+import de.gwdg.metadataqa.marc.dao.MarcLeader;
 import de.gwdg.metadataqa.marc.dao.record.BibliographicRecord;
 import de.gwdg.metadataqa.marc.definition.DataSource;
 import de.gwdg.metadataqa.marc.definition.MarcVersion;
@@ -45,7 +45,7 @@ public class RecordIterator {
   private CommonParameters parameters;
   private String replacementInControlFields;
   private MarcVersion marcVersion;
-  private Leader.Type defaultRecordType;
+  private MarcLeader.Type defaultRecordType;
   private DecimalFormat decimalFormat;
   // this schema attribute could be merged with the UNIMARC one
   private PicaSchemaManager picaSchema;
@@ -206,7 +206,7 @@ public class RecordIterator {
     } else if (parameters.getSchemaType().equals(SchemaType.PICA)) {
       return MarcFactory.createPicaFromMarc4j(marc4jRecord, picaSchema);
     } else {
-      return MarcFactory.createUnimarcFromMarc4j(marc4jRecord, unimarcSchema);
+      return MarcFactory.createUnimarcFromMarc4j(marc4jRecord, defaultRecordType, unimarcSchema);
     }
   }
 

@@ -16,8 +16,9 @@ import de.gwdg.metadataqa.marc.dao.Control006;
 import de.gwdg.metadataqa.marc.dao.Control007;
 import de.gwdg.metadataqa.marc.dao.Control008;
 import de.gwdg.metadataqa.marc.dao.DataField;
-import de.gwdg.metadataqa.marc.dao.Leader;
+import de.gwdg.metadataqa.marc.dao.Marc21Leader;
 import de.gwdg.metadataqa.marc.dao.MarcControlField;
+import de.gwdg.metadataqa.marc.dao.MarcLeader;
 import de.gwdg.metadataqa.marc.dao.MarcPositionalControlField;
 import de.gwdg.metadataqa.marc.definition.MarcVersion;
 import de.gwdg.metadataqa.marc.definition.bibliographic.SchemaType;
@@ -26,7 +27,6 @@ import de.gwdg.metadataqa.marc.definition.structure.DataFieldDefinition;
 import de.gwdg.metadataqa.marc.definition.structure.Indicator;
 import de.gwdg.metadataqa.marc.model.SolrFieldType;
 import de.gwdg.metadataqa.marc.utils.marcspec.legacy.MarcSpec;
-
 import de.gwdg.metadataqa.marc.utils.pica.path.PicaPath;
 import de.gwdg.metadataqa.marc.utils.unimarc.UnimarcConverter;
 import org.apache.commons.lang3.StringUtils;
@@ -59,7 +59,7 @@ public abstract class BibliographicRecord implements Extractable, Serializable {
 
   private static final Map<String, Boolean> undefinedTags = new HashMap<>();
 
-  private Leader leader;
+  private Marc21Leader leader;
   private MarcControlField control001;
   private MarcControlField control003;
   private MarcControlField control005;
@@ -112,13 +112,13 @@ public abstract class BibliographicRecord implements Extractable, Serializable {
     unhandledTags.add(tag);
   }
 
-  public void setLeader(Leader leader) {
+  public void setLeader(Marc21Leader leader) {
     this.leader = leader;
     leader.setMarcRecord(this);
   }
 
   public void setLeader(String leader) {
-    this.leader = new Leader(leader);
+    this.leader = new Marc21Leader(leader);
     this.leader.setMarcRecord(this);
   }
 
@@ -127,16 +127,16 @@ public abstract class BibliographicRecord implements Extractable, Serializable {
       leader = UnimarcConverter.leaderFromUnimarc(leader);
     }
 
-    this.leader = new Leader(leader);
+    this.leader = new Marc21Leader(leader);
     this.leader.setMarcRecord(this);
   }
 
-  public Leader getLeader() {
+  public Marc21Leader getLeader() {
     return leader;
   }
 
-  public Leader.Type getType() {
-    return leader != null ? leader.getType() : Leader.Type.BOOKS;
+  public MarcLeader.Type getType() {
+    return leader != null ? leader.getType() : MarcLeader.Type.BOOKS;
   }
 
   public MarcControlField getControl001() {

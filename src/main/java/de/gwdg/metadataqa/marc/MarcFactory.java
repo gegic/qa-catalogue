@@ -13,7 +13,8 @@ import de.gwdg.metadataqa.marc.dao.Control006;
 import de.gwdg.metadataqa.marc.dao.Control007;
 import de.gwdg.metadataqa.marc.dao.Control008;
 import de.gwdg.metadataqa.marc.dao.DataField;
-import de.gwdg.metadataqa.marc.dao.Leader;
+import de.gwdg.metadataqa.marc.dao.Marc21Leader;
+import de.gwdg.metadataqa.marc.dao.MarcLeader;
 import de.gwdg.metadataqa.marc.dao.record.BibliographicRecord;
 import de.gwdg.metadataqa.marc.dao.record.Marc21Record;
 import de.gwdg.metadataqa.marc.dao.record.PicaRecord;
@@ -75,7 +76,7 @@ public class MarcFactory {
         continue;
       switch (dataElement.getLabel()) {
         case "leader":
-          marcRecord.setLeader(new Leader(extractFirst(selector, dataElement)));
+          marcRecord.setLeader(new Marc21Leader(extractFirst(selector, dataElement)));
           break;
         case "001":
           marcRecord.setControl001(new Control001(extractFirst(selector, dataElement)));
@@ -121,7 +122,7 @@ public class MarcFactory {
   }
 
   public static BibliographicRecord createFromMarc4j(Record marc4jRecord,
-                                                     Leader.Type defaultType) {
+                                                     MarcLeader.Type defaultType) {
     return createFromMarc4j(marc4jRecord, defaultType, MarcVersion.MARC21);
   }
 
@@ -131,13 +132,13 @@ public class MarcFactory {
   }
 
   public static BibliographicRecord createFromMarc4j(Record marc4jRecord,
-                                                     Leader.Type defaultType,
+                                                     MarcLeader.Type defaultType,
                                                      MarcVersion marcVersion) {
     return createFromMarc4j(marc4jRecord, defaultType, marcVersion, null);
   }
 
   /**
-   * Create a MarcRecord object from Marc4j object
+   * Create a MarcRecord object from Marc4j object by setting the leader, control fields and data fields
    * @param marc4jRecord The Marc4j record
    * @param defaultType The defauld document type
    * @param marcVersion The MARC version
@@ -145,7 +146,7 @@ public class MarcFactory {
    * @return
    */
   public static BibliographicRecord createFromMarc4j(Record marc4jRecord,
-                                                     Leader.Type defaultType,
+                                                     MarcLeader.Type defaultType,
                                                      MarcVersion marcVersion,
                                                      String replacementInControlFields) {
     var marcRecord = new Marc21Record();
@@ -154,7 +155,7 @@ public class MarcFactory {
       String data = marc4jRecord.getLeader().marshal();
       if (replacementInControlFields != null)
         data = data.replace(replacementInControlFields, " ");
-      marcRecord.setLeader(new Leader(data, defaultType));
+      marcRecord.setLeader(new Marc21Leader(data, defaultType));
 
       if (marcRecord.getType() == null) {
         throw new InvalidParameterException(
@@ -181,8 +182,12 @@ public class MarcFactory {
     return marcRecord;
   }
 
-  // This method could potentially be merged with the createPicaFromMarc4j method
-  public static BibliographicRecord createUnimarcFromMarc4j(Record marc4jRecord, UnimarcSchemaManager unimarcSchemaManager) {
+  public static BibliographicRecord createUnimarcFromMarc4j(Record marc4jRecord,
+                                                            MarcLeader.Type defaultType,
+                                                            UnimarcSchemaManager unimarcSchemaManager) {
+
+
+
     var marcRecord = new UnimarcRecord();
     importMarc4jControlFields(marc4jRecord, marcRecord, null);
     importMarc4jDataFields(marc4jRecord, marcRecord, unimarcSchemaManager);

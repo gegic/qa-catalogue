@@ -3,7 +3,7 @@ package de.gwdg.metadataqa.marc.definition.tags.tags5xx;
 import de.gwdg.metadataqa.marc.analysis.validator.Validator;
 import de.gwdg.metadataqa.marc.analysis.validator.ValidatorConfiguration;
 import de.gwdg.metadataqa.marc.dao.DataField;
-import de.gwdg.metadataqa.marc.dao.Leader;
+import de.gwdg.metadataqa.marc.dao.Marc21Leader;
 import de.gwdg.metadataqa.marc.dao.record.BibliographicRecord;
 import de.gwdg.metadataqa.marc.dao.record.Marc21Record;
 import de.gwdg.metadataqa.marc.definition.MarcVersion;
@@ -18,7 +18,7 @@ public class Tag533Test {
   @Test
   public void test_valid() {
     BibliographicRecord marcRecord = new Marc21Record("000714573");
-    marcRecord.setLeader(new Leader("01168cam a2200325 a 4500"));
+    marcRecord.setLeader(new Marc21Leader("01168cam a2200325 a 4500"));
     DataField field = new DataField(Tag533.getInstance(), " ", " ",
       "a", "Microfilm.",
       "b", "Washington, D.C. :",
@@ -38,7 +38,7 @@ public class Tag533Test {
   @Test
   public void test_invalid() {
     BibliographicRecord marcRecord = new Marc21Record("000714573");
-    marcRecord.setLeader(new Leader("01168cam a2200325 a 4500"));
+    marcRecord.setLeader(new Marc21Leader("01168cam a2200325 a 4500"));
     DataField field = new DataField(Tag533.getInstance(), " ", " ",
       "a", "Microfilm.",
       "b", "Washington, D.C. :",

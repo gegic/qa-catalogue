@@ -2,6 +2,7 @@ package de.gwdg.metadataqa.marc.definition.controlpositions;
 
 import de.gwdg.metadataqa.marc.definition.structure.ControlfieldPositionDefinition;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +22,8 @@ public class ControlfieldPositionList {
   }
 
   protected void index() {
-    for (List<ControlfieldPositionDefinition> positions : positions.values()) {
-      for (ControlfieldPositionDefinition position : positions) {
+    for (List<ControlfieldPositionDefinition> positionDefinitions : positions.values()) {
+      for (ControlfieldPositionDefinition position : positionDefinitions) {
         positionIdMap.put(position.getId(), position);
       }
     }
@@ -30,5 +31,19 @@ public class ControlfieldPositionList {
 
   public ControlfieldPositionDefinition getById(String id) {
     return positionIdMap.getOrDefault(id, null);
+  }
+
+  public void setPositions(List<ControlfieldPositionDefinition> positions) {
+    // TODO I'm not really sure what categories are supposed to be, so in this case everything is put into the same category
+    // Also I'm not going to be using Control008Type. Instead a simple string ALL_MATERIALS will be used for now.
+    if (!this.positions.containsKey("ALL_MATERIALS")) {
+      this.positions.put("ALL_MATERIALS", new ArrayList<>());
+    }
+
+    for (ControlfieldPositionDefinition position : positions) {
+      this.positions.get("ALL_MATERIALS").add(position);
+    }
+
+    index();
   }
 }

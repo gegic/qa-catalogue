@@ -59,7 +59,7 @@ public abstract class BibliographicRecord implements Extractable, Serializable {
 
   private static final Map<String, Boolean> undefinedTags = new HashMap<>();
 
-  private Marc21Leader leader;
+  private MarcLeader leader;
   private MarcControlField control001;
   private MarcControlField control003;
   private MarcControlField control005;
@@ -112,17 +112,18 @@ public abstract class BibliographicRecord implements Extractable, Serializable {
     unhandledTags.add(tag);
   }
 
-  public void setLeader(Marc21Leader leader) {
+  public void setLeader(MarcLeader leader) {
     this.leader = leader;
     leader.setMarcRecord(this);
   }
 
-  public void setLeader(String leader) {
+  public void setMarc21Leader(String leader) {
     this.leader = new Marc21Leader(leader);
     this.leader.setMarcRecord(this);
   }
 
   public void setLeader(String leader, MarcVersion marcVersion) {
+    // This method is probably going to end up not being used for UNIMARC
     if (marcVersion.equals(MarcVersion.UNIMARC)) {
       leader = UnimarcConverter.leaderFromUnimarc(leader);
     }
@@ -131,12 +132,14 @@ public abstract class BibliographicRecord implements Extractable, Serializable {
     this.leader.setMarcRecord(this);
   }
 
-  public Marc21Leader getLeader() {
+  public MarcLeader getLeader() {
     return leader;
   }
 
   public MarcLeader.Type getType() {
-    return leader != null ? leader.getType() : MarcLeader.Type.BOOKS;
+    return leader != null && leader.getType() != null
+        ? leader.getType()
+        : MarcLeader.Type.BOOKS;
   }
 
   public MarcControlField getControl001() {

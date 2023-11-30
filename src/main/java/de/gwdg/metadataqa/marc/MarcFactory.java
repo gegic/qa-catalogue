@@ -15,6 +15,7 @@ import de.gwdg.metadataqa.marc.dao.Control008;
 import de.gwdg.metadataqa.marc.dao.DataField;
 import de.gwdg.metadataqa.marc.dao.Marc21Leader;
 import de.gwdg.metadataqa.marc.dao.MarcLeader;
+import de.gwdg.metadataqa.marc.dao.UnimarcLeader;
 import de.gwdg.metadataqa.marc.dao.record.BibliographicRecord;
 import de.gwdg.metadataqa.marc.dao.record.Marc21Record;
 import de.gwdg.metadataqa.marc.dao.record.PicaRecord;
@@ -134,21 +135,20 @@ public class MarcFactory {
   public static BibliographicRecord createFromMarc4j(Record marc4jRecord,
                                                      MarcLeader.Type defaultType,
                                                      MarcVersion marcVersion) {
-    return createFromMarc4j(marc4jRecord, defaultType, marcVersion, null);
+    return createMarc21FromMarc4j(marc4jRecord, defaultType, marcVersion, null);
   }
 
   /**
-   * Create a MarcRecord object from Marc4j object by setting the leader, control fields and data fields
+   * Create a MarcRecord object from Marc4j object by setting the leader, control fields and data fields.
    * @param marc4jRecord The Marc4j record
    * @param defaultType The defauld document type
    * @param marcVersion The MARC version
    * @param replacementInControlFields A ^ or # character which sould be replaced with space in control fields
-   * @return
    */
-  public static BibliographicRecord createFromMarc4j(Record marc4jRecord,
-                                                     MarcLeader.Type defaultType,
-                                                     MarcVersion marcVersion,
-                                                     String replacementInControlFields) {
+  public static BibliographicRecord createMarc21FromMarc4j(Record marc4jRecord,
+                                                           MarcLeader.Type defaultType,
+                                                           MarcVersion marcVersion,
+                                                           String replacementInControlFields) {
     var marcRecord = new Marc21Record();
 
     if (marc4jRecord.getLeader() != null) {
@@ -185,10 +185,15 @@ public class MarcFactory {
   public static BibliographicRecord createUnimarcFromMarc4j(Record marc4jRecord,
                                                             MarcLeader.Type defaultType,
                                                             UnimarcSchemaManager unimarcSchemaManager) {
-
-
-
     var marcRecord = new UnimarcRecord();
+
+    if (marc4jRecord.getLeader() != null) {
+      String data = marc4jRecord.getLeader().marshal();
+      UnimarcLeader leader = new UnimarcLeader(unimarcSchemaManager.getLeaderDefinition(), data, defaultType);
+      leader.initialize();
+      marcRecord.setLeader(leader);
+    }
+
     importMarc4jControlFields(marc4jRecord, marcRecord, null);
     importMarc4jDataFields(marc4jRecord, marcRecord, unimarcSchemaManager);
 
@@ -389,7 +394,7 @@ public class MarcFactory {
     var marcRecord = new Marc21Record();
     for (AlephseqLine line : lines) {
       if (line.isLeader()) {
-        marcRecord.setLeader(line.getContent());
+        marcRecord.setMarc21Leader(line.getContent());
       } else if (line.isNumericTag()) {
         marcRecord.setField(line.getTag(), line.getInd1(), line.getInd2(), line.getContent(), marcVersion);
       }
@@ -439,28 +444,7 @@ public class MarcFactory {
   public static Record createRecordFromMarcline(List<MarclineLine> lines) {
     Record marc4jRecord = new RecordImpl();
     for (MarclineLine line : lines) {
-      if (line.isLeader()) {
-        try {
-          marc4jRecord.setLeader(new LeaderImpl(line.getContent()));
-        } catch (StringIndexOutOfBoundsException e) {
-          logger.severe("Error at creating leader: " + e.getMessage());
-        }
-      } else if (line.isNumericTag()) {
-        if (line.isControlField()) {
-          marc4jRecord.addVariableField(new ControlFieldImpl(line.getTag(), line.getContent()));
-        } else {
-          var df = new DataFieldImpl(line.getTag(), line.getInd1().charAt(0), line.getInd2().charAt(0));
-          for (String[] pair : line.parseSubfields()) {
-            if (pair.length == 2 && pair[0] != null && pair[1] != null) {
-              df.addSubfield(new SubfieldImpl(pair[0].charAt(0), pair[1]));
-            } else {
-              logger.log(Level.WARNING, "parse error in record #{0}) tag {1}: \"{2}\"",
-                new Object[]{line.getRecordID(), line.getTag(), line.getRawContent()});
-            }
-          }
-          marc4jRecord.addVariableField(df);
-        }
-      }
+      processMarclineLine(marc4jRecord, line);
     }
     return marc4jRecord;
   }
@@ -512,5 +496,44 @@ public class MarcFactory {
     if (id != null)
       marc4jRecord.addVariableField(new ControlFieldImpl("001", id));
     return marc4jRecord;
+  }
+
+  /**
+   * Process a single line of a MARC record and makes the appropriate changes in the marc4jRecord
+   * @param marc4jRecord The marc4j record being created
+   * @param line The MarcLine line being processed
+   */
+  private static void processMarclineLine(Record marc4jRecord, MarclineLine line) {
+    if (line.isLeader()) {
+      try {
+        marc4jRecord.setLeader(new LeaderImpl(line.getContent()));
+      } catch (StringIndexOutOfBoundsException e) {
+        logger.severe("Error at creating leader: " + e.getMessage());
+      }
+      return;
+    }
+
+    // If the line is not a leader, then it's either a control field or a data field, so it has to have a numeric tag
+    if (!line.isNumericTag()) {
+      return;
+    }
+
+    if (line.isControlField()) {
+      ControlFieldImpl controlField = new ControlFieldImpl(line.getTag(), line.getContent());
+      marc4jRecord.addVariableField(controlField);
+      return;
+    }
+
+    var df = new DataFieldImpl(line.getTag(), line.getInd1().charAt(0), line.getInd2().charAt(0));
+
+    for (String[] pair : line.parseSubfields()) {
+      if (pair.length == 2 && pair[0] != null && pair[1] != null) {
+        df.addSubfield(new SubfieldImpl(pair[0].charAt(0), pair[1]));
+      } else {
+        logger.log(Level.WARNING, "parse error in record #{0}) tag {1}: \"{2}\"",
+            new Object[]{line.getRecordID(), line.getTag(), line.getRawContent()});
+      }
+    }
+    marc4jRecord.addVariableField(df);
   }
 }

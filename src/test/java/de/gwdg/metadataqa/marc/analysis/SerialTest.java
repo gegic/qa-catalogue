@@ -15,7 +15,7 @@ public class SerialTest {
   @Test
   public void test() {
     BibliographicRecord marcRecord = new Marc21Record("ocn655855524");
-    marcRecord.setLeader("02157cas a2200517Ka 4500");
+    marcRecord.setMarc21Leader("02157cas a2200517Ka 4500");
     marcRecord.setField("008", "100812c19359999ne.qx.p.o.....0...a0eng.d");
     marcRecord.setField("006", "m.....o..d........");
     marcRecord.setField("245",

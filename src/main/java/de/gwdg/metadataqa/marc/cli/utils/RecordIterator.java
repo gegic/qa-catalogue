@@ -202,7 +202,7 @@ public class RecordIterator {
 
   private BibliographicRecord transformMarcRecord(Record marc4jRecord) {
     if (parameters.getSchemaType().equals(SchemaType.MARC21)) {
-      return MarcFactory.createFromMarc4j(marc4jRecord, defaultRecordType, marcVersion, replacementInControlFields);
+      return MarcFactory.createMarc21FromMarc4j(marc4jRecord, defaultRecordType, marcVersion, replacementInControlFields);
     } else if (parameters.getSchemaType().equals(SchemaType.PICA)) {
       return MarcFactory.createPicaFromMarc4j(marc4jRecord, picaSchema);
     } else {

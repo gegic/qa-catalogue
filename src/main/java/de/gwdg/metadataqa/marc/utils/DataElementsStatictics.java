@@ -1,12 +1,12 @@
 package de.gwdg.metadataqa.marc.utils;
 
 import de.gwdg.metadataqa.marc.Utils;
+import de.gwdg.metadataqa.marc.definition.MarcVersion;
 import de.gwdg.metadataqa.marc.definition.structure.ControlFieldDefinition;
 import de.gwdg.metadataqa.marc.definition.structure.ControlfieldPositionDefinition;
 import de.gwdg.metadataqa.marc.definition.structure.DataFieldDefinition;
 import de.gwdg.metadataqa.marc.definition.structure.Indicator;
 import de.gwdg.metadataqa.marc.definition.structure.MarcDefinition;
-import de.gwdg.metadataqa.marc.definition.MarcVersion;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -28,7 +28,7 @@ public abstract class DataElementsStatictics {
     for (ControlFieldDefinition controlField : MarcDefinition.getComplexControlFields()) {
       counter.count(DataElementType.controlFields);
 
-      for (List<ControlfieldPositionDefinition> controlFieldPositions : controlField.getControlfieldPositions().values())
+      for (List<ControlfieldPositionDefinition> controlFieldPositions : controlField.getControlfieldPositionCategories().values())
         counter.add(DataElementType.controlFieldPositions, controlFieldPositions.size());
     }
 

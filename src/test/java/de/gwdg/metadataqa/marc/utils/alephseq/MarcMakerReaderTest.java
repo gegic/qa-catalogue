@@ -36,7 +36,7 @@ public class MarcMakerReaderTest {
     if (reader.hasNext())
       marc4jRecord = reader.next();
     assertNotNull(marc4jRecord);
-    BibliographicRecord marcRecord = MarcFactory.createFromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
+    BibliographicRecord marcRecord = MarcFactory.createMarc21FromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
     assertNotNull(marcRecord);
 
     assertEquals("987874829", marcRecord.getId());
@@ -65,7 +65,7 @@ public class MarcMakerReaderTest {
     if (reader.hasNext())
       marc4jRecord = reader.next();
     assertNotNull(marc4jRecord);
-    BibliographicRecord marcRecord = MarcFactory.createFromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
+    BibliographicRecord marcRecord = MarcFactory.createMarc21FromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
     assertNotNull(marcRecord);
 
     assertEquals("0123456789", marcRecord.getId());
@@ -94,7 +94,7 @@ public class MarcMakerReaderTest {
     if (reader.hasNext())
       marc4jRecord = reader.next();
     assertNotNull(marc4jRecord);
-    BibliographicRecord marcRecord = MarcFactory.createFromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
+    BibliographicRecord marcRecord = MarcFactory.createMarc21FromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
     assertNotNull(marcRecord);
 
     assertEquals("rb1993000850", marcRecord.getId());

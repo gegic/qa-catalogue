@@ -13,11 +13,11 @@ public abstract class ControlFieldDefinition extends DataFieldDefinition {
     return controlfieldPositions;
   }
 
-  public Map<String, List<ControlfieldPositionDefinition>> getControlfieldPositions() {
+  public Map<String, List<ControlfieldPositionDefinition>> getControlfieldPositionCategories() {
     return controlfieldPositions.getPositions();
   }
 
-  public List<ControlfieldPositionDefinition> getControlfieldPosition(String key) {
+  public List<ControlfieldPositionDefinition> getControlfieldPositions(String key) {
     return controlfieldPositions.get(key);
   }
 

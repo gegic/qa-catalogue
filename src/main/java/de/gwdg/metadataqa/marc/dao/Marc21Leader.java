@@ -131,38 +131,12 @@ public class Marc21Leader extends MarcLeader implements Extractable, Validatable
     }
   }
 
-  public String resolve(ControlfieldPositionDefinition key) {
-    String value = valuesMap.get(key);
-    return key.resolve(value);
-  }
-
-  public String resolve(String key) {
-    return resolve(LeaderPositions.getByLabel(key));
-  }
-
-  @Override
-  public Map<ControlfieldPositionDefinition, String> getMap() {
-    return valuesMap;
-  }
-
-  public String get(ControlfieldPositionDefinition key) {
-    return valuesMap.get(key);
-  }
-
   public String getByLabel(String key) {
     return get(LeaderPositions.getByLabel(key));
   }
 
   public String getById(String key) {
     return get(LeaderPositions.getInstance().getById(key));
-  }
-
-  public MarcLeader.Type getType() {
-    return type;
-  }
-
-  public String getLeaderString() {
-    return content;
   }
 
   public ControlValue getCharacterCodingScheme() {

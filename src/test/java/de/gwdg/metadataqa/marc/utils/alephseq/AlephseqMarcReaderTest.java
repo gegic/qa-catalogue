@@ -40,7 +40,7 @@ public class AlephseqMarcReaderTest {
     if (reader.hasNext())
       marc4jRecord = reader.next();
     assertNotNull(marc4jRecord);
-    BibliographicRecord marcRecord = MarcFactory.createFromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
+    BibliographicRecord marcRecord = MarcFactory.createMarc21FromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
     assertNotNull(marcRecord);
 
     assertEquals("000000002", marcRecord.getId());
@@ -340,7 +340,7 @@ public class AlephseqMarcReaderTest {
     while (reader.hasNext()) {
       marc4jRecord = reader.next();
       if (marc4jRecord.getControlNumber().equals("000000008")) {
-        BibliographicRecord marcRecord = MarcFactory.createFromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
+        BibliographicRecord marcRecord = MarcFactory.createMarc21FromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
         assertEquals("München :", marcRecord.getDatafield("260").get(0).getSubfield("a").get(0).getValue());
       }
     }
@@ -359,7 +359,7 @@ public class AlephseqMarcReaderTest {
     while (reader.hasNext()) {
       marc4jRecord = reader.next();
       if (marc4jRecord.getControlNumber().equals("990017782740205171")) {
-        BibliographicRecord marcRecord = MarcFactory.createFromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
+        BibliographicRecord marcRecord = MarcFactory.createMarc21FromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
         assertEquals("1993.", marcRecord.getDatafield("260").get(0).getSubfield("c").get(0).getValue());
       }
     }

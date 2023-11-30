@@ -2,8 +2,8 @@ package de.gwdg.metadataqa.marc.cli;
 
 import de.gwdg.metadataqa.api.util.FileUtils;
 import de.gwdg.metadataqa.marc.MarcFactory;
-import de.gwdg.metadataqa.marc.dao.record.Marc21Record;
 import de.gwdg.metadataqa.marc.dao.record.BibliographicRecord;
+import de.gwdg.metadataqa.marc.dao.record.Marc21Record;
 import de.gwdg.metadataqa.marc.definition.MarcVersion;
 import de.gwdg.metadataqa.marc.model.SolrFieldType;
 import org.junit.Test;
@@ -40,7 +40,7 @@ public class IndexingTest {
   @Test
   public void testSubfieldCode() throws IOException, URISyntaxException {
     BibliographicRecord marcRecord = new Marc21Record();
-    marcRecord.setLeader("01445cem a22004454a 4500");
+    marcRecord.setMarc21Leader("01445cem a22004454a 4500");
     marcRecord.setField("034", "0 $aa");
     assertEquals(1, marcRecord.getDatafield("034").size());
     Map<String, List<String>> index = marcRecord.getKeyValuePairs(SolrFieldType.MIXED);
@@ -50,7 +50,7 @@ public class IndexingTest {
   @Test
   public void testPositions() throws IOException, URISyntaxException {
     BibliographicRecord marcRecord = new Marc21Record();
-    marcRecord.setLeader("01445cem a22004454a 4500");
+    marcRecord.setMarc21Leader("01445cem a22004454a 4500");
     marcRecord.setField("800", "0 $7aa");
     assertEquals(1, marcRecord.getDatafield("800").size());
     Map<String, List<String>> index = marcRecord.getKeyValuePairs(SolrFieldType.MIXED);

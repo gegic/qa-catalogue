@@ -22,13 +22,13 @@ public class Control006Test {
     Control006 field = new Control006("sa", MarcLeader.Type.CONTINUING_RESOURCES);
     Control006Definition definition = (Control006Definition)field.getDefinition();
 
-    assertNotNull("not null", definition.getControlfieldPositions());
-    assertEquals(8, definition.getControlfieldPositions().size());
+    assertNotNull("not null", definition.getControlfieldPositionCategories());
+    assertEquals(8, definition.getControlfieldPositionCategories().size());
 
     assertEquals(MarcLeader.Type.CONTINUING_RESOURCES, field.getRecordType());
 
     List<ControlfieldPositionDefinition> subfields =
-      definition.getControlfieldPositions()
+      definition.getControlfieldPositionCategories()
       .get(Control008Type.CONTINUING_RESOURCES.getValue());
 
     assertEquals(2, field.getValuesList().size());
@@ -43,7 +43,7 @@ public class Control006Test {
 
     assertEquals(
       11,
-      definition.getControlfieldPositions()
+      definition.getControlfieldPositionCategories()
       .get(Control008Type.CONTINUING_RESOURCES.getValue())
       .size()
     );

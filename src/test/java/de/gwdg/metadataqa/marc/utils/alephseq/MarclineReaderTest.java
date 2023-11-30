@@ -41,7 +41,7 @@ public class MarclineReaderTest {
     if (reader.hasNext())
       marc4jRecord = reader.next();
     assertNotNull(marc4jRecord);
-    BibliographicRecord marcRecord = MarcFactory.createFromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
+    BibliographicRecord marcRecord = MarcFactory.createMarc21FromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "^");
     assertNotNull(marcRecord);
 
     assertEquals("010000011", marcRecord.getId());
@@ -430,7 +430,7 @@ public class MarclineReaderTest {
     if (reader.hasNext())
       marc4jRecord = reader.next();
     assertNotNull(marc4jRecord);
-    BibliographicRecord marcRecord = MarcFactory.createFromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "#");
+    BibliographicRecord marcRecord = MarcFactory.createMarc21FromMarc4j(marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.GENT, "#");
     assertNotNull(marcRecord);
     assertEquals("tu   ", marcRecord.getControl007().get(0).getContent());
   }

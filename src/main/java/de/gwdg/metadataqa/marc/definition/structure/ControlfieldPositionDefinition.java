@@ -1,16 +1,16 @@
 package de.gwdg.metadataqa.marc.definition.structure;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
 import de.gwdg.metadataqa.marc.EncodedValue;
 import de.gwdg.metadataqa.marc.definition.FRBRFunction;
 import de.gwdg.metadataqa.marc.definition.general.codelist.CodeList;
 import de.gwdg.metadataqa.marc.definition.general.parser.SubfieldContentParser;
 import de.gwdg.metadataqa.marc.definition.general.validator.SubfieldValidator;
 import org.apache.commons.lang3.StringUtils;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -228,10 +228,14 @@ public class ControlfieldPositionDefinition implements Serializable {
   }
 
   public String getControlField() {
-    String className = this.getClass().getSimpleName();
-    if (className.startsWith("Leader"))
+    // The original implementation used to be quite closely tied to the original MARC21-in-code representation.
+    // For now, I'm going to resort to a hacky approach where we use the ID of the control field
+    // TODO rethink and reimplement this
+
+    if (id.toLowerCase().startsWith("leader"))
       return "Leader";
-    return this.getClass().getSimpleName().substring(3, 6);
+
+    return id.substring(0, 3);
   }
 
   public EncodedValue getCode(String otherCode) {

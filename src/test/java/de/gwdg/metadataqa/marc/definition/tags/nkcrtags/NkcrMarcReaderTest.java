@@ -44,7 +44,7 @@ public class NkcrMarcReaderTest {
       i++;
       marc4jRecord = reader.next();
       assertNotNull(marc4jRecord);
-      BibliographicRecord marcRecord = MarcFactory.createFromMarc4j(
+      BibliographicRecord marcRecord = MarcFactory.createMarc21FromMarc4j(
         marc4jRecord, MarcLeader.Type.BOOKS, MarcVersion.NKCR, "^"
       );
       assertNotNull(marcRecord);

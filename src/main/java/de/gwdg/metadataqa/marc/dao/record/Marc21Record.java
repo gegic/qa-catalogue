@@ -3,7 +3,6 @@ package de.gwdg.metadataqa.marc.dao.record;
 import de.gwdg.metadataqa.marc.Utils;
 import de.gwdg.metadataqa.marc.analysis.AuthorityCategory;
 import de.gwdg.metadataqa.marc.analysis.ShelfReadyFieldsBooks;
-import de.gwdg.metadataqa.marc.analysis.ThompsonTraillFields;
 import de.gwdg.metadataqa.marc.dao.DataField;
 
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ public class Marc21Record extends BibliographicRecord {
   private static Map<String, Map<String, Boolean>> skippableAuthoritySubfields;
   private static Map<String, Map<String, Boolean>> skippableSubjectSubfields;
   private static Map<AuthorityCategory, List<String>> authorityTagsMap;
-  private static Map<ThompsonTraillFields, List<String>> thompsonTraillTagMap;
   private static Map<ShelfReadyFieldsBooks, Map<String, List<String>>> shelfReadyMap;
 
 
@@ -108,36 +106,6 @@ public class Marc21Record extends BibliographicRecord {
     authorityTagsMap.put(AuthorityCategory.GEOGRAPHIC, List.of("751", "752"));
     authorityTagsMap.put(AuthorityCategory.TITLES, List.of("130", "730", "740", "830"));
     authorityTagsMap.put(AuthorityCategory.OTHER, List.of("720", "753", "754"));
-  }
-
-  public Map<ThompsonTraillFields, List<String>> getThompsonTraillTagsMap() {
-    if (thompsonTraillTagMap == null)
-      initializeThompsonTraillTags();
-
-    return thompsonTraillTagMap;
-  }
-
-  private void initializeThompsonTraillTags() {
-    thompsonTraillTagMap = new LinkedHashMap<>();
-
-    thompsonTraillTagMap.put(ThompsonTraillFields.ISBN, Arrays.asList("020"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.AUTHORS, Arrays.asList("100", "110", "111"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.ALTERNATIVE_TITLES, Arrays.asList("246"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.EDITION, Arrays.asList("250"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.CONTRIBUTORS, Arrays.asList("700", "710", "711", "720"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.SERIES, Arrays.asList("440", "490", "800", "810", "830"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.TOC, Arrays.asList("505", "520"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.DATE_008, Arrays.asList("008/ö7"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.DATE_26X, Arrays.asList("260$c", "264$c"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.LC_NLM, Arrays.asList("050", "060", "090"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.LC_NLM, Arrays.asList("600", "610", "611", "630", "650", "651", "653"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.MESH, Arrays.asList("600", "610", "611", "630", "650", "651", "653"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.FAST, Arrays.asList("600", "610", "611", "630", "650", "651", "653"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.GND, Arrays.asList("600", "610", "611", "630", "650", "651", "653"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.OTHER, Arrays.asList("600", "610", "611", "630", "650", "651", "653"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.ONLINE, Arrays.asList("008/23", "300$a")); // 29
-    thompsonTraillTagMap.put(ThompsonTraillFields.LANGUAGE_OF_RESOURCE, Arrays.asList("008/35"));
-    thompsonTraillTagMap.put(ThompsonTraillFields.COUNTRY_OF_PUBLICATION, Arrays.asList("008/15"));
   }
 
   public Map<ShelfReadyFieldsBooks, Map<String, List<String>>> getShelfReadyMap() {

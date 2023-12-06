@@ -209,6 +209,7 @@ public class AlephseqMarcReaderTest {
       "Piece designation: 000010184913\n" +
       "[920: Used in the union catalog of Belgium]\n" +
       "Value: book\n";
+    expected = expected.replaceAll("\n", System.lineSeparator());
     assertEquals(expected, formatted);
 
     formatted = marcRecord.formatAsMarc();
@@ -292,6 +293,7 @@ public class AlephseqMarcReaderTest {
       "852_j: LWBIB.L33.D01.006.0063\n" +
       "852_p: 000010184913\n" +
       "920_a: book\n";
+    expected = expected.replaceAll("\n", System.lineSeparator());
     assertEquals(expected, formatted);
 
     Map<String, List<String>> pairs = marcRecord.getKeyValuePairs();

@@ -32,7 +32,7 @@ import de.gwdg.metadataqa.marc.utils.pica.PicaDataField;
 import de.gwdg.metadataqa.marc.utils.pica.PicaSchemaManager;
 import de.gwdg.metadataqa.marc.utils.pica.PicaSubfield;
 import de.gwdg.metadataqa.marc.utils.pica.reader.model.PicaLine;
-import de.gwdg.metadataqa.marc.utils.unimarc.UnimarcDataField;
+import de.gwdg.metadataqa.marc.utils.unimarc.UnimarcDataFieldImpl;
 import de.gwdg.metadataqa.marc.utils.unimarc.UnimarcSchemaManager;
 import net.minidev.json.JSONArray;
 import org.marc4j.marc.ControlField;
@@ -277,8 +277,8 @@ public class MarcFactory {
                                              UnimarcSchemaManager schema) {
     for (org.marc4j.marc.DataField dataField : marc4jRecord.getDataFields()) {
       // todo discuss this as it feels as if it's never going to be an instance of UnimarcDataField
-      boolean isUnimarc = dataField instanceof UnimarcDataField;
-      UnimarcDataField unimarcDf = isUnimarc ? (UnimarcDataField) dataField : null;
+      boolean isUnimarc = dataField instanceof UnimarcDataFieldImpl;
+      UnimarcDataFieldImpl unimarcDf = isUnimarc ? (UnimarcDataFieldImpl) dataField : null;
       var definition = isUnimarc
           ? schema.lookup(unimarcDf)
           : schema.lookup(dataField.getTag());

@@ -8,7 +8,7 @@ import org.marc4j.marc.impl.DataFieldImpl;
  * A schema counterpart of this class is {@link de.gwdg.metadataqa.marc.utils.unimarc.UnimarcFieldDefinition},
  * which represents a definition of a UNIMARC field in the scehma.
  */
-public class UnimarcDataField extends DataFieldImpl {
+public class UnimarcDataFieldImpl extends DataFieldImpl {
   private String occurrence;
 
   /**
@@ -18,7 +18,7 @@ public class UnimarcDataField extends DataFieldImpl {
    * @param ind1 The first indicator code
    * @param ind2 The second indicator code
    */
-  public UnimarcDataField(String tag, char ind1, char ind2) {
+  public UnimarcDataFieldImpl(String tag, char ind1, char ind2) {
     super(tag, ind1, ind2);
   }
 }

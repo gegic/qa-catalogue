@@ -23,7 +23,7 @@ public class UnimarcSchemaManager {
      * @param dataField The data field to look up
      * @return The definition for the respective dataField
      */
-    public UnimarcFieldDefinition lookup(UnimarcDataField dataField) {
+    public UnimarcFieldDefinition lookup(UnimarcDataFieldImpl dataField) {
         String tag = dataField.getTag();
         return lookup(tag);
     }
